@@ -12,14 +12,16 @@
 
     <groupId>ro.phd.vsp</groupId>
     <artifactId>reactive-optimization-test</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <version>0.1</version>
+
     <name>reactive-optimization-test</name>
     <description>Demo project for Spring Boot</description>
-    <packaging>pom</packaging>
 
     <modules>
         <module>ropt-caller</module>
         <module>ropt-receiver</module>
+        <module>ropt-receiver-reactive</module>
     </modules>
 
     <properties>
@@ -56,6 +58,10 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

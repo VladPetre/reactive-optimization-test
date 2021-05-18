@@ -6,13 +6,14 @@
     <parent>
         <groupId>ro.phd.vsp</groupId>
         <artifactId>reactive-optimization-test</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>0.1</version>
+        <relativePath>../../reactive-optimization-test/pom.xml</relativePath> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>ro.phd.vsp</groupId>
     <artifactId>ropt-caller</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+
     <name>ropt-caller</name>
     <description>Demo project for Spring Boot</description>
 
@@ -21,31 +22,12 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
