@@ -20,11 +20,13 @@
     <properties>
         <java.version>11</java.version>
     </properties>
-    <dependencies>
 
+    <dependencies>
+        <!--for now ingerited from parent-->
     </dependencies>
 
     <build>
+        <finalName>ropt-receiver</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

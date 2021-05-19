@@ -22,12 +22,12 @@
     </properties>
 
     <dependencies>
-
+        <!--for now ingerited from parent-->
     </dependencies>
 
     <build>
+        <finalName>ropt-caller</finalName>
         <plugins>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
