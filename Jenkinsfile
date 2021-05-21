@@ -1,9 +1,6 @@
 pipeline {
 
-    tools {
-        maven 'M3'
-    }
-   environment {
+    environment {
         registry = "vladstep/ropt-caller"
         registryCredential = 'dockerhub_id'
         dockerImage = ''
@@ -12,6 +9,12 @@ pipeline {
     agent any
 
     stages {
+
+        stage('clean workspace') {
+            steps {
+                cleanWs()
+            }
+        }
         stage('Cloning Git') {
             steps {
             sh '''
@@ -29,15 +32,18 @@ pipeline {
              }
         }
 
-        stage('Building our image') {
+        stage('Building docker image') {
             steps {
+				sh '''
+					cp reactive-optimization-test/ropt-caller/Dockerfile ./Dockerfile
+				'''
                 script {
-                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                    dockerImage = docker.build registry + ":1.$BUILD_NUMBER"
                 }
             }
         }
 
-        stage('Deploy our image') {
+        stage('push docker image') {
             steps {
                 script {
                     docker.withRegistry( '', registryCredential ) {
@@ -49,8 +55,20 @@ pipeline {
 
         stage('Cleaning up') {
             steps {
-                sh "docker rmi $registry:$BUILD_NUMBER"
+                sh "docker rmi $registry:1.$BUILD_NUMBER"
+				//cleanWs()
             }
+        }
+
+        stage('Deploy App to Kube') {
+              steps {
+                sh '''
+                    cp reactive-optimization-test/ropt-caller/deployment-service.yml ./deployment-service.yml
+                '''
+                script {
+                  kubernetesDeploy(configs: "deployment-service.yml", kubeconfigId: "localkubeconfig")
+                }
+              }
         }
     }
 }

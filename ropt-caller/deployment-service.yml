@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ropt-caller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ropt-caller
+  template:
+    metadata:
+      name: ropt-caller-pod
+      labels:
+        app: ropt-caller
+    spec:
+      containers:
+        - name: ropt-caller-container
+          image: vladstep/ropt-caller:25
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ropt-caller-svc
+  labels:
+    app: ropt-caller
+spec:
+  selector:
+    app: ropt-caller
+  type: LoadBalancer
+  ports:
+    - port: 9090
+      targetPort: 8080
