@@ -53,12 +53,6 @@ pipeline {
             }
         }
 
-        stage('Cleaning up') {
-            steps {
-                sh "docker rmi $registry:1.$BUILD_NUMBER"
-				//cleanWs()
-            }
-        }
 
         stage('Deploy App to Kube') {
               steps {
@@ -66,9 +60,17 @@ pipeline {
                     cp reactive-optimization-test/ropt-caller/deployment-service.yml ./deployment-service.yml
                 '''
                 script {
-                  kubernetesDeploy(configs: "deployment-service.yml", kubeconfigId: "localkubeconfig")
+                //!! kubernetes CD plugin should be different than 2.11.x
+                  kubernetesDeploy(configs: "deployment-service.yml", kubeconfigId: "kubeConfigLocal")
                 }
               }
+        }
+
+        stage('Cleaning up docker') {
+            steps {
+                sh "docker rmi $registry:1.$BUILD_NUMBER"
+				//cleanWs()
+            }
         }
     }
 }
