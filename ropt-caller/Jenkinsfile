@@ -38,7 +38,7 @@ pipeline {
 					cp reactive-optimization-test/ropt-caller/Dockerfile ./Dockerfile
 				'''
                 script {
-                    dockerImage = docker.build registry + ":1.$BUILD_NUMBER"
+                    dockerImage = docker.build registry + ":latest"
                 }
             }
         }
@@ -68,7 +68,7 @@ pipeline {
 
         stage('Cleaning up docker') {
             steps {
-                sh "docker rmi $registry:1.$BUILD_NUMBER"
+                sh "docker rmi $registry:latest"
 				//cleanWs()
             }
         }
