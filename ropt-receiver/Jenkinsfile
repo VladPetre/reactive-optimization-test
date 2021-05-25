@@ -59,7 +59,7 @@ pipeline {
               steps {
                 sh '''
                     cp reactive-optimization-test/ropt-receiver/deployment-service.yml ./deployment-service.yml
-                    cat ./deployment-service.yml
+                    sed -i 's/{{ropt-image-tag}}/$imageTag/g' ./deployment-service.yml
                 '''
                 script {
                 //!! kubernetes CD plugin should be different than 2.11.x
