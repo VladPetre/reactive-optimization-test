@@ -5,6 +5,8 @@ metadata:
   name: ropt-receiver
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: ropt-receiver
