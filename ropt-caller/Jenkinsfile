@@ -39,7 +39,7 @@ pipeline {
 					cp reactive-optimization-test/ropt-caller/Dockerfile ./Dockerfile
 				'''
                 script {
-                    dockerImage = docker.build registry + imageTag
+                    dockerImage = docker.build registry + ":" + imageTag
                 }
             }
         }
@@ -59,8 +59,6 @@ pipeline {
               steps {
                 sh '''
                     cp reactive-optimization-test/ropt-caller/deployment-service.yml ./deployment-service.yml
-                    sed -i 's/{{ropt-image-tag}}/$imageTag/g' ./deployment-service.yml
-                    echo $imageTag
                     cat ./deployment-service.yml
                 '''
                 script {
