@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: ropt-receiver-reactive-container
-          image: vladstep/ropt-receiver-reactive:25
+          image: vladstep/ropt-receiver-reactive:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
