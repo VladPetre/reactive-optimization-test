@@ -42,13 +42,13 @@ public class ClasicCallerService {
       response = restTemplate
           .exchange(buildURI("/test"), HttpMethod.GET, entity, String.class);
     } catch (RestClientException e) {
-      LOGGER.error(e.getStackTrace().toString());
+      LOGGER.error("ex: {}", e);
     }
 
     LOGGER.info("res: {}", response);
   }
 
-  
+
   private String buildURI(String path) {
     return roptReceiverURI + path;
   }
