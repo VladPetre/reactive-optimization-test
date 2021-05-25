@@ -1,5 +1,6 @@
 package ro.phd.vsp.roptreceiverreactive.controllers;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,10 +9,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "/test")
 public class TestController {
+  
+  @Value("${ropt.caller.version}")
+  public String serviceVersion;
 
-  @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-  public String testInterCom() {
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  public String testDeploy() {
     return "{\"test\" : \"success\"}";
+  }
+
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  public String getVersion() {
+    return "{\"test\" : \"" + serviceVersion + "\"}";
   }
 
 }
