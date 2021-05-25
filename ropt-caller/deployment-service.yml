@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: ropt-caller-container
-          image: vladstep/ropt-caller:latest
+          image: vladstep/ropt-caller:{{ropt-image-tag}}
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

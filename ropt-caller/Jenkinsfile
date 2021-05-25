@@ -2,6 +2,7 @@ pipeline {
 
     environment {
         registry = "vladstep/ropt-caller"
+        imageTag = "1.$BUILD_NUMBER"
         registryCredential = 'dockerhub_id'
         dockerImage = ''
     }
@@ -38,7 +39,7 @@ pipeline {
 					cp reactive-optimization-test/ropt-caller/Dockerfile ./Dockerfile
 				'''
                 script {
-                    dockerImage = docker.build registry + ":latest"
+                    dockerImage = docker.build registry + imageTag
                 }
             }
         }
@@ -58,6 +59,7 @@ pipeline {
               steps {
                 sh '''
                     cp reactive-optimization-test/ropt-caller/deployment-service.yml ./deployment-service.yml
+                    sed -i 's/{{ropt-image-tag}}/$imageTag/g' ./deployment-service.yml
                 '''
                 script {
                 //!! kubernetes CD plugin should be different than 2.11.x
@@ -68,7 +70,7 @@ pipeline {
 
         stage('Cleaning up docker') {
             steps {
-                sh "docker rmi $registry:latest"
+                sh "docker rmi $registry:$imageTag"
 				//cleanWs()
             }
         }
