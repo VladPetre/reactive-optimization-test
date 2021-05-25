@@ -1,7 +1,7 @@
 pipeline {
 
     environment {
-        registry = "vladstep/ropt-caller"
+        registry = "vladstep/ropt-receiver-reactive"
         imageTag = "1.$BUILD_NUMBER"
         registryCredential = 'dockerhub_id'
         dockerImage = ''
@@ -27,7 +27,7 @@ pipeline {
         stage('maven build') {
              steps {
                 sh '''
-                    cd reactive-optimization-test/ropt-caller
+                    cd reactive-optimization-test/ropt-receiver-reactive
                     mvn install
                 '''
              }
@@ -36,7 +36,7 @@ pipeline {
         stage('Building docker image') {
             steps {
 				sh '''
-					cp reactive-optimization-test/ropt-caller/Dockerfile ./Dockerfile
+					cp reactive-optimization-test/ropt-receiver-reactive/Dockerfile ./Dockerfile
 				'''
                 script {
                     dockerImage = docker.build registry + ":" + imageTag
@@ -58,7 +58,7 @@ pipeline {
         stage('Deploy App to Kube') {
               steps {
                 sh '''
-                    cp reactive-optimization-test/ropt-caller/deployment-service.yml ./deployment-service.yml
+                    cp reactive-optimization-test/ropt-receiver-reactive/deployment-service.yml ./deployment-service.yml
                     sed -i 's/{{ropt-image-tag}}/$imageTag/g' ./deployment-service.yml
                 '''
                 script {
