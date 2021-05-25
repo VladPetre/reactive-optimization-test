@@ -2,21 +2,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ropt-caller
+  name: ropt-receiver
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ropt-caller
+      app: ropt-receiver
   template:
     metadata:
-      name: ropt-caller-pod
+      name: ropt-receiver-pod
       labels:
-        app: ropt-caller
+        app: ropt-receiver
     spec:
       containers:
-        - name: ropt-caller-container
-          image: vladstep/ropt-caller:25
+        - name: ropt-receiver-container
+          image: vladstep/ropt-receiver:25
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -24,12 +24,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ropt-caller-cip-svc
+  name: ropt-receiver-cip-svc
   labels:
-    app: ropt-caller
+    app: ropt-receiver
 spec:
   selector:
-    app: ropt-caller
+    app: ropt-receiver
   type: ClusterIP
   ports:
     - port: 8080
@@ -38,12 +38,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ropt-caller-svc
+  name: ropt-receiver-svc
   labels:
-    app: ropt-caller
+    app: ropt-receiver
 spec:
   selector:
-    app: ropt-caller
+    app: ropt-receiver
   type: LoadBalancer
   ports:
     - port: 9090

@@ -1,0 +1,76 @@
+pipeline {
+
+    environment {
+        registry = "vladstep/ropt-receiver"
+        registryCredential = 'dockerhub_id'
+        dockerImage = ''
+    }
+
+    agent any
+
+    stages {
+
+        stage('clean workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+        stage('Cloning Git') {
+            steps {
+            sh '''
+                git clone https://github.com/VladPetre/reactive-optimization-test.git
+               '''
+            }
+        }
+
+        stage('maven build') {
+             steps {
+                sh '''
+                    cd reactive-optimization-test/ropt-receiver
+                    mvn install
+                '''
+             }
+        }
+
+        stage('Building docker image') {
+            steps {
+				sh '''
+					cp reactive-optimization-test/ropt-receiver/Dockerfile ./Dockerfile
+				'''
+                script {
+                    dockerImage = docker.build registry + ":1.$BUILD_NUMBER"
+                }
+            }
+        }
+
+        stage('push docker image') {
+            steps {
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage.push()
+                    }
+                }
+            }
+        }
+
+
+        stage('Deploy App to Kube') {
+              steps {
+                sh '''
+                    cp reactive-optimization-test/ropt-receiver/deployment-service.yml ./deployment-service.yml
+                '''
+                script {
+                //!! kubernetes CD plugin should be different than 2.11.x
+                  kubernetesDeploy(configs: "deployment-service.yml", kubeconfigId: "kubeConfigLocal")
+                }
+              }
+        }
+
+        stage('Cleaning up docker') {
+            steps {
+                sh "docker rmi $registry:1.$BUILD_NUMBER"
+				//cleanWs()
+            }
+        }
+    }
+}
