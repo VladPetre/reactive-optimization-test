@@ -46,5 +46,5 @@ spec:
     app: ropt-receiver
   type: LoadBalancer
   ports:
-    - port: 9090
+    - port: 8082
       targetPort: 8080
