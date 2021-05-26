@@ -3,7 +3,6 @@ package ro.phd.vsp.roptcaller.models;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Getter;
@@ -20,10 +19,7 @@ import lombok.ToString;
 public class ExecutionStep {
 
   @Id
-  @GeneratedValue()
-  private UUID id;
-
-  private String instanceId;
+  private UUID instanceId;
   private String instanceType;
   private Integer threadsNumber;
   private Integer entriesNumber;
@@ -31,6 +27,6 @@ public class ExecutionStep {
   private LocalDateTime finishedAt;
   private String method;
   private Integer status;
-  private Boolean active;
+  private LocalDateTime lastActive;
 
 }

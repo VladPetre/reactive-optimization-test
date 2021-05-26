@@ -1,12 +1,17 @@
 package ro.phd.vsp.roptcaller.controllers;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ro.phd.vsp.roptcaller.models.ExecutionStep;
+import ro.phd.vsp.roptcaller.repositories.ExecutionStepsRepository;
 import ro.phd.vsp.roptcaller.services.ClasicCallerService;
 
 @RestController
@@ -15,6 +20,10 @@ import ro.phd.vsp.roptcaller.services.ClasicCallerService;
 public class TestController {
 
   private final ClasicCallerService clasicCallerService;
+  private final ExecutionStepsRepository executionStepsRepository;
+
+  @Qualifier("uniqueInstanceUUID")
+  private final UUID UNIQUE_INSTANCE_UUID;
 
   @Value("${ropt.version}")
   public String svcVersion;
@@ -27,5 +36,24 @@ public class TestController {
   @GetMapping(path = "/version", produces = MediaType.APPLICATION_JSON_VALUE)
   public String getSvcVersion() {
     return "{\"version\" : \"" + svcVersion + "\"}";
+  }
+
+  @GetMapping(path = "/ctx", produces = MediaType.APPLICATION_JSON_VALUE)
+  public String getCtx() {
+    return UNIQUE_INSTANCE_UUID.toString();
+  }
+
+  @GetMapping(path = "/updStep", produces = MediaType.APPLICATION_JSON_VALUE)
+  public String testUpdateStep() {
+    ExecutionStep step = new ExecutionStep();
+
+    step.setInstanceId(UNIQUE_INSTANCE_UUID);
+    step.setLastActive(LocalDateTime.now());
+    step.setEntriesNumber(10);
+    step.setMethod("GET");
+
+    executionStepsRepository.save(step);
+
+    return UNIQUE_INSTANCE_UUID.toString();
   }
 }
