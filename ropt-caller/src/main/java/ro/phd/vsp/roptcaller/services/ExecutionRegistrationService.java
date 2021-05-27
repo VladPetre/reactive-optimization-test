@@ -1,7 +1,6 @@
 package ro.phd.vsp.roptcaller.services;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import ro.phd.vsp.roptcaller.models.ExecutionStep;
 import ro.phd.vsp.roptcaller.repositories.ExecutionStepsRepository;
 
 @Component
@@ -30,20 +28,25 @@ public class ExecutionRegistrationService {
    * <p>
    * Updates every 10s
    */
-  @Scheduled(fixedDelay = 10000)
+  @Scheduled(fixedDelay = 10000, initialDelay = 200)
   @Transactional
   public void registerForExecution() {
 
-    Optional<ExecutionStep> step = executionStepsRepository.findById(UNIQUE_INSTANCE_UUID);
-    if (step.isPresent()) {
+    try {
       executionStepsRepository
-          .updateLastActive(LocalDateTime.now(), UNIQUE_INSTANCE_UUID);
-    } else {
-      ExecutionStep newStep = new ExecutionStep();
-      newStep.setInstanceId(UNIQUE_INSTANCE_UUID);
-      newStep.setLastActive(LocalDateTime.now());
-      executionStepsRepository.save(newStep);
+          .findByInstanceId(UNIQUE_INSTANCE_UUID)
+          .ifPresent(
+              ss -> {
+                if (!ss.isEmpty()) {
+                  executionStepsRepository
+                      .updateLastActive(LocalDateTime.now(), UNIQUE_INSTANCE_UUID);
+                }
+              }
+          );
+    } catch (Exception e) {
+      LOGGER.error("Failed to update last_active for : {} -> {}", UNIQUE_INSTANCE_UUID, e);
     }
 
+    LOGGER.debug("Updated last_active for : {} ", UNIQUE_INSTANCE_UUID);
   }
 }
