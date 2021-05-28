@@ -1,5 +1,7 @@
 package ro.phd.vsp.roptcaller.models;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,20 +14,26 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "execution_steps")
+@Table(name = "execution_status")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
-public class ExecutionStep {
+public class ExecutionStatus {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  private UUID instanceId;
+  private String instanceType;
   private Integer threadsNumber;
   private Integer entriesNumber;
+  private LocalDateTime startedAt;
+  private LocalDateTime finishedAt;
   private String method;
   private Integer status;
+  private LocalDateTime lastActive;
+  private Integer error; //0 - none, 1 - exception
 
 }

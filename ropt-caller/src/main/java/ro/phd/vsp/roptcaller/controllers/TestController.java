@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ro.phd.vsp.roptcaller.models.ExecutionStep;
-import ro.phd.vsp.roptcaller.repositories.ExecutionStepsRepository;
+import ro.phd.vsp.roptcaller.models.ExecutionStatus;
+import ro.phd.vsp.roptcaller.repositories.ExecutionStatusRepository;
 import ro.phd.vsp.roptcaller.services.ClasicCallerService;
 
 @RestController
@@ -20,7 +20,7 @@ import ro.phd.vsp.roptcaller.services.ClasicCallerService;
 public class TestController {
 
   private final ClasicCallerService clasicCallerService;
-  private final ExecutionStepsRepository executionStepsRepository;
+  private final ExecutionStatusRepository executionStatusRepository;
 
   @Qualifier("uniqueInstanceUUID")
   private final UUID UNIQUE_INSTANCE_UUID;
@@ -44,15 +44,15 @@ public class TestController {
   }
 
   @GetMapping(path = "/updStep", produces = MediaType.APPLICATION_JSON_VALUE)
-  public String testUpdateStep() {
-    ExecutionStep step = new ExecutionStep();
+  public String testUpdateStatus() {
+    ExecutionStatus step = new ExecutionStatus();
 
     step.setInstanceId(UNIQUE_INSTANCE_UUID);
     step.setLastActive(LocalDateTime.now());
     step.setEntriesNumber(10);
     step.setMethod("GET");
 
-    executionStepsRepository.save(step);
+    executionStatusRepository.save(step);
 
     return UNIQUE_INSTANCE_UUID.toString();
   }
