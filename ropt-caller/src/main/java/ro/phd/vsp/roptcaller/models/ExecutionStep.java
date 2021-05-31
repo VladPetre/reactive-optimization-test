@@ -1,5 +1,6 @@
 package ro.phd.vsp.roptcaller.models;
 
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,5 +28,9 @@ public class ExecutionStep {
   private Integer entriesNumber;
   private String method;
   private Integer status;
+  private Boolean active;
+  private LocalDateTime lastActive;
+  private Integer receiverNrInstances;
+  private Long secondsOffset;
 
 }

@@ -1,27 +1,22 @@
-package ro.phd.vsp.roptcaller.models;
+package ro.phd.vsp.roptcaller.dtos;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Entity
-@Table(name = "sensors_data")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @ToString
-public class SensorData {
+public class SensorDataDTO {
 
-  @Id
   private UUID guid;
   private Double value;
   private Double battery;
   private LocalDateTime updatedOn;
-
 }

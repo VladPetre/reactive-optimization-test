@@ -2,7 +2,6 @@ package ro.phd.vsp.roptcaller.models;
 
 import java.util.UUID;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Getter;
@@ -19,7 +18,6 @@ import lombok.ToString;
 public class Sensor {
 
   @Id
-  @GeneratedValue()
   private UUID guid;
   private String sensorType;
   private String location;

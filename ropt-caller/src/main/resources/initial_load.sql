@@ -1,17 +1,11 @@
--- INSERT INTO execution_steps (id, active, entries_number, finished_at, instance_id,
---                              instance_type, method, started_at, status, threads_number)
---  (gen_random_uuid(), true, 10, null, 'test-instance-2', 'test', 'GET', null, 0, 16),INSERT INTO sensors(guid, sensor_type, location, status)
+CREATE
+    EXTENSION IF NOT EXISTS "pgcrypto";
 
-INSERT INTO execution_steps (entries_number, method, status, threads_number)
-VALUES (1000, 'GET', 1, 4),
-       (10000, 'GET', 1, 4),
-       (100000, 'GET', 1, 4),
-       (1000, 'GET', 1, 16),
-       (10000, 'GET', 1, 16),
-       (100000, 'GET', 1, 16),
-       (1000, 'GET', 1, 32),
-       (10000, 'GET', 1, 32),
-       (100000, 'GET', 1, 32);
+INSERT INTO execution_steps (entries_number, method, status, threads_number, active,
+                             receiver_nr_instances, seconds_offset)
+VALUES (100000, 'GET', 1, 4, false, 1, 300),
+       (100000, 'GET', 1, 16, false, 1, 300),
+       (100000, 'GET', 1, 32, false, 1, 300);
 
 INSERT INTO sensors(guid, sensor_type, location, status)
 VALUES ('1be2e67f-f8bb-4995-a714-8311f6675df1', 'Powernet', 'Vanderveer Street', 2),

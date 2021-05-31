@@ -1,22 +1,32 @@
 package ro.phd.vsp.roptcaller.services;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ForkJoinPool;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import ro.phd.vsp.roptcaller.dtos.SensorDataDTO;
+import ro.phd.vsp.roptcaller.enums.ExecutionMethods;
+import ro.phd.vsp.roptcaller.enums.InstanceTypes;
+import ro.phd.vsp.roptcaller.models.ExecutionStatus;
+import ro.phd.vsp.roptcaller.models.ExecutionStep;
+import ro.phd.vsp.roptcaller.models.Sensor;
+import ro.phd.vsp.roptcaller.repositories.ExecutionStatusRepository;
+import ro.phd.vsp.roptcaller.utils.HttpUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -24,70 +34,87 @@ public class ClasicCallerService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ClasicCallerService.class);
   private final RestTemplate restTemplate;
+  private final ExecutionRegistrationService registrationService;
+  private final SensorsService sensorsService;
+  private final ExecutionStatusRepository executionStatusRepository;
+
+  @Qualifier("uniqueInstanceUUID")
+  private final UUID UNIQUE_INSTANCE_UUID;
 
   @Value("${ROPT_RECEIVER_URI}")
   public String roptReceiverURI;
 
+  /**
+   * Execute Requests to Receiver using Restemplate The configuration is taken from ExecutionSteps
+   * Scheduled task with fixedRate = 5s and initialDelay 5s
+   */
+  @Scheduled(fixedRate = 5000, initialDelay = 5000)
+  public void executeRTRequests() {
 
-  //@Scheduled(fixedRate = 1000, initialDelay = 1000)
-  public void testReceiverMService(int nrOfThreads, int data) {
+    ExecutionStep step = registrationService.getStepToExecute().get();
+    List<Integer> list = IntStream.range(0, step.getEntriesNumber()).boxed()
+        .collect(Collectors.toList());
+    ExecutionStatus execStatus = new ExecutionStatus(null, UNIQUE_INSTANCE_UUID,
+        InstanceTypes.CALLER.toString(),
+        null, null, 0, step);
+
+    List<Sensor> sensors = sensorsService.getAllSensors();
+
     ForkJoinPool forkJoinPool = null;
 
-    List<Integer> list = new ArrayList<>();
-    IntStream.range(0, data).forEach(i -> list.add(i));
-
-    System.out.println(nrOfThreads + " - " + data);
-    long start = System.currentTimeMillis();
+    LOGGER.info("Executing instance / step {}/{}", UNIQUE_INSTANCE_UUID, step);
 
     try {
-
-      forkJoinPool = new ForkJoinPool(nrOfThreads);
+      forkJoinPool = new ForkJoinPool(step.getThreadsNumber());
+      execStatus.setStartedAt(LocalDateTime.now());
       forkJoinPool.submit(
           () -> list.parallelStream().forEach(
               x -> {
-                doGetRequest();
-//                System.out.println(
-//                    Thread.currentThread().getName() + " -- " /*+ (System.currentTimeMillis() - start)
-//                        + " -- "*/ + doGetRequest());
-              }
-          )
-      ).get();
+                int randomNr = getRandom(0, sensors.size());
+                Sensor sensor = sensors.get(randomNr);
+                doRequest(ExecutionMethods.valueOf(step.getMethod()),
+                    new SensorDataDTO(sensor.getGuid(), (double) randomNr, (double) randomNr / 10,
+                        null));
+              })
+      ).join();
 
-      System.out.println("finish: " + (System.currentTimeMillis() - start));
+      execStatus.setFinishedAt(LocalDateTime.now());
+      executionStatusRepository.save(execStatus);
 
     } catch (Exception e) {
-      e.printStackTrace();
+      LOGGER.error("Error executing step {} - {}: {}", UNIQUE_INSTANCE_UUID, step, e);
+      execStatus.setError(1);
+    } finally {
+      forkJoinPool.shutdown();
     }
+
   }
 
-  private String doGetRequest() {
-    HttpHeaders headers = buildRTHeaders();
+  /**
+   * Call receiver with ExecutionMethods.GET
+   *
+   * @param data senserDataDTO details
+   * @return SensorDataDTO
+   */
+  private SensorDataDTO doRequest(ExecutionMethods method, SensorDataDTO data) {
+    HttpEntity<SensorDataDTO> entity = new HttpEntity<>(data,
+        HttpUtils.buildRTHeaders(UNIQUE_INSTANCE_UUID.toString()));
 
-    HttpEntity<String> entity = new HttpEntity<>(headers);
-
-    ResponseEntity<String> response = null;
+    ResponseEntity<SensorDataDTO> response = null;
 
     try {
       response = restTemplate
-          .exchange(buildURI("/test"), HttpMethod.GET, entity, String.class);
-//      LOGGER.info("res: {}", response);
+          .exchange(HttpUtils.getRTDestinationPathByMethod(method), HttpMethod.POST, entity,
+              SensorDataDTO.class);
       return response.getBody();
     } catch (RestClientException e) {
-      LOGGER.error("ex: {}", e);
+      LOGGER.error("Resttemplate - exchange error: {} - {}", UNIQUE_INSTANCE_UUID, e);
     }
 
     return null;
   }
 
-  private HttpHeaders buildRTHeaders() {
-    HttpHeaders headers = new HttpHeaders();
-    headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-    return headers;
+  public int getRandom(int min, int max) {
+    return new Random().nextInt(max - min) + min;
   }
-
-
-  private String buildURI(String path) {
-    return roptReceiverURI + path;
-  }
-
 }
