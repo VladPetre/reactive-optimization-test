@@ -25,32 +25,14 @@ public class TestController {
   @Value("${ropt.version}")
   public String svcVersion;
 
-  @GetMapping(path = "/fjp", produces = MediaType.APPLICATION_JSON_VALUE)
-  public void testDeploy() {
-    clasicCallerService.executeRTRequests();
-  }
-
   @GetMapping(path = "/version", produces = MediaType.APPLICATION_JSON_VALUE)
   public String getSvcVersion() {
     return "{\"version\" : \"" + svcVersion + "\"}";
   }
 
-  @GetMapping(path = "/ctx", produces = MediaType.APPLICATION_JSON_VALUE)
-  public String getCtx() {
-    return UNIQUE_INSTANCE_UUID.toString();
+  @GetMapping(path = "/fjp", produces = MediaType.APPLICATION_JSON_VALUE)
+  public void testDeploy() {
+    clasicCallerService.testCallerConsumer();
   }
 
-//  @GetMapping(path = "/updStep", produces = MediaType.APPLICATION_JSON_VALUE)
-//  public String testUpdateStatus() {
-//    ExecutionStatus step = new ExecutionStatus();
-//
-//    step.setInstanceId(UNIQUE_INSTANCE_UUID);
-//    step.setLastActive(LocalDateTime.now());
-//    step.setEntriesNumber(10);
-//    step.setMethod("GET");
-//
-//    executionStatusRepository.save(step);
-//
-//    return UNIQUE_INSTANCE_UUID.toString();
-//  }
 }
