@@ -1,46 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>ro.phd.vsp</groupId>
-        <artifactId>reactive-optimization-test</artifactId>
-        <version>0.1</version>
-        <relativePath>../../reactive-optimization-test/pom.xml</relativePath>
-    </parent>
-
+  <parent>
     <groupId>ro.phd.vsp</groupId>
-    <artifactId>ropt-receiver</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>reactive-optimization-test</artifactId>
+    <version>0.1</version>
+    <relativePath>../../reactive-optimization-test/pom.xml</relativePath>
+  </parent>
 
-    <name>ropt-receiver</name>
-    <description>Demo project for Spring Boot</description>
+  <groupId>ro.phd.vsp</groupId>
+  <artifactId>ropt-receiver</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
 
-    <properties>
-        <java.version>11</java.version>
-    </properties>
+  <name>ropt-receiver</name>
+  <description>Demo project for Spring Boot</description>
 
-    <dependencies>
-        <!--for now ingerited from parent-->
-    </dependencies>
+  <properties>
+    <java.version>11</java.version>
+  </properties>
 
-    <build>
-        <finalName>ropt-receiver</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.2.20</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>ropt-receiver</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+            </exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
