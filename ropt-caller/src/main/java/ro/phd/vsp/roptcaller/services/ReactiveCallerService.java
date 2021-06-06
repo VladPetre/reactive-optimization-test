@@ -2,6 +2,7 @@ package ro.phd.vsp.roptcaller.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ForkJoinPool;
@@ -13,11 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 import ro.phd.vsp.roptcaller.dtos.SensorDataDTO;
 import ro.phd.vsp.roptcaller.enums.ExecutionMethods;
 import ro.phd.vsp.roptcaller.enums.InstanceTypes;
@@ -27,12 +27,12 @@ import ro.phd.vsp.roptcaller.models.Sensor;
 import ro.phd.vsp.roptcaller.repositories.ExecutionStatusRepository;
 import ro.phd.vsp.roptcaller.utils.HttpUtils;
 
-@Service
+@Component
 @RequiredArgsConstructor
-public class ClasicCallerService {
+public class ReactiveCallerService {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ClasicCallerService.class);
-  private final RestTemplate restTemplate;
+  private static final Logger LOGGER = LoggerFactory.getLogger(ReactiveCallerService.class);
+  private final WebClient webClient;
   private final ExecutionRegistrationService registrationService;
   private final SensorsService sensorsService;
   private final ExecutionStatusRepository executionStatusRepository;
@@ -40,13 +40,12 @@ public class ClasicCallerService {
   @Qualifier("uniqueInstanceUUID")
   private final UUID UNIQUE_INSTANCE_UUID;
 
-
   /**
-   * Execute Requests to Receiver using Restemplate The configuration is taken from ExecutionSteps
-   * Scheduled task with fixedRate = 5s and initialDelay 5s
+   * Execute Requests to Receiver using Reactive WebClient The configuration is taken from
+   * ExecutionSteps Scheduled task with fixedRate = 5s and initialDelay 5s
    */
   @Scheduled(fixedRate = 5000, initialDelay = 3000)
-  public void executeRTRequests() {
+  public void executeReactiveRequests() {
 
     ExecutionStep step = registrationService.getStepToExecute().get();
     List<Integer> list = IntStream.range(0, step.getEntriesNumber()).boxed()
@@ -66,7 +65,7 @@ public class ClasicCallerService {
       execStatus.setStartedAt(LocalDateTime.now());
       forkJoinPool.submit(
           () -> list.parallelStream().forEach(
-              getRTCallConsumer(step, sensors))
+              getReactiveCallConsumer(step, sensors))
       ).join();
 
       execStatus.setFinishedAt(LocalDateTime.now());
@@ -88,16 +87,17 @@ public class ClasicCallerService {
    * @param sensors
    * @return
    */
-  private Consumer<Integer> getRTCallConsumer(ExecutionStep step, List<Sensor> sensors) {
+  private Consumer<Integer> getReactiveCallConsumer(ExecutionStep step, List<Sensor> sensors) {
     return x -> {
       try {
-        int randomNr = getRandom(0, sensors.size() - 1);
+        int randomNr = getRandom(0, sensors.size());
         Sensor sensor = sensors.get(randomNr);
-        SensorDataDTO sensorDataDTO = doRequest(
+        doRequest(
             ExecutionMethods.valueOf(step.getMethod()),
             new SensorDataDTO(sensor.getGuid(), (double) randomNr, (double) randomNr / 10,
-                LocalDateTime.now()));
-        sensorsService.updateSensorStatus(randomNr, sensor.getGuid());
+                LocalDateTime.now()))
+            .filter(Objects::nonNull)
+            .subscribe(sd -> sensorsService.updateSensorStatus(randomNr, sd.getGuid()));
 
       } catch (Exception e) {
         LOGGER.error("Error calling receiver from {}, iteration {}, ex: {}",
@@ -113,47 +113,52 @@ public class ClasicCallerService {
    * @param data   senserDataDTO details
    * @return SensorDataDTO
    */
-  private SensorDataDTO doRequest(ExecutionMethods method, SensorDataDTO data) {
+  private Mono<SensorDataDTO> doRequest(ExecutionMethods method, SensorDataDTO data) {
     switch (method) {
       case GET:
-        return doGetRequest(data).getBody();
+        return doGetRequest(data);
       case SAVE:
-        return doPostRequest(data).getBody();
+        return doPostRequest(data);
       case GET_SAVE:
-        return doPutRequest(data).getBody();
+        return doPutRequest(data);
       default:
         throw new IllegalArgumentException("Invalid option for method:" + method);
     }
   }
 
-  private ResponseEntity<SensorDataDTO> doGetRequest(SensorDataDTO data) {
-    HttpEntity<String> entity = new HttpEntity<>(
-        HttpUtils.buildRTHeaders(UNIQUE_INSTANCE_UUID.toString()));
+  private Mono<SensorDataDTO> doGetRequest(SensorDataDTO data) {
 
-    return restTemplate
-        .exchange("/rt/sensor-data/" + data.getGuid(), HttpMethod.GET, entity,
-            SensorDataDTO.class);
+    return webClient.get()
+        .uri("/rt/sensor-data/" + data.getGuid())
+        .headers(h -> HttpUtils.buildRTHeaders(UNIQUE_INSTANCE_UUID.toString()))
+        .retrieve()
+        .bodyToMono(SensorDataDTO.class);
   }
 
-  private ResponseEntity<SensorDataDTO> doPostRequest(SensorDataDTO data) {
+  private Mono<SensorDataDTO> doPostRequest(SensorDataDTO data) {
     HttpEntity<SensorDataDTO> entity = new HttpEntity<>(data,
         HttpUtils.buildRTHeaders(UNIQUE_INSTANCE_UUID.toString()));
 
-    return restTemplate
-        .exchange("/rt/sensor-data", HttpMethod.POST, entity,
-            SensorDataDTO.class);
+    return webClient.post()
+        .uri("/rt/sensor-data")
+        .headers(h -> HttpUtils.buildRTHeaders(UNIQUE_INSTANCE_UUID.toString()))
+        .body(Mono.just(data), SensorDataDTO.class)
+        .retrieve()
+        .bodyToMono(SensorDataDTO.class);
   }
 
-  private ResponseEntity<SensorDataDTO> doPutRequest(SensorDataDTO data) {
-    HttpEntity<SensorDataDTO> entity = new HttpEntity<>(data,
-        HttpUtils.buildRTHeaders(UNIQUE_INSTANCE_UUID.toString()));
+  private Mono<SensorDataDTO> doPutRequest(SensorDataDTO data) {
 
-    return restTemplate
-        .exchange("/rt/sensor-data/" + data.getGuid(), HttpMethod.PUT, entity,
-            SensorDataDTO.class);
+    return webClient.put()
+        .uri("/rt/sensor-data/" + data.getGuid())
+        .headers(h -> HttpUtils.buildRTHeaders(UNIQUE_INSTANCE_UUID.toString()))
+        .body(Mono.just(data), SensorDataDTO.class)
+        .retrieve()
+        .bodyToMono(SensorDataDTO.class);
   }
 
   public int getRandom(int min, int max) {
     return new Random().nextInt(max - min) + min;
   }
+
 }
