@@ -1,14 +1,11 @@
 package ro.phd.vsp.roptcaller.services;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.ForkJoinPool;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +14,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ro.phd.vsp.roptcaller.dtos.SensorDataDTO;
 import ro.phd.vsp.roptcaller.enums.ExecutionMethods;
@@ -34,6 +32,7 @@ public class ReactiveCallerService {
   private static final Logger LOGGER = LoggerFactory.getLogger(ReactiveCallerService.class);
   private final WebClient webClient;
   private final ExecutionRegistrationService registrationService;
+  private final SensorsReactiveService sensorsReactiveService;
   private final SensorsService sensorsService;
   private final ExecutionStatusRepository executionStatusRepository;
 
@@ -47,37 +46,58 @@ public class ReactiveCallerService {
   @Scheduled(fixedRate = 5000, initialDelay = 3000)
   public void executeReactiveRequests() {
 
-    ExecutionStep step = registrationService.getStepToExecute().get();
-    List<Integer> list = IntStream.range(0, step.getEntriesNumber()).boxed()
-        .collect(Collectors.toList());
+    ExecutionStep step;
+    try {
+      step = registrationService.getReactStepToExecute().get();
+    } catch (Exception e) {
+      return;
+    }
     ExecutionStatus execStatus = new ExecutionStatus(null, UNIQUE_INSTANCE_UUID,
         InstanceTypes.CALLER.toString(),
         null, null, 0, step);
 
     List<Sensor> sensors = sensorsService.getAllSensors();
 
-    ForkJoinPool forkJoinPool = null;
-
     LOGGER.info("Executing instance / step {}/{}", UNIQUE_INSTANCE_UUID, step);
 
     try {
-      forkJoinPool = new ForkJoinPool(step.getThreadsNumber());
-      execStatus.setStartedAt(LocalDateTime.now());
-      forkJoinPool.submit(
-          () -> list.parallelStream().forEach(
-              getReactiveCallConsumer(step, sensors))
-      ).join();
 
+      Flux.range(0, step.getEntriesNumber())
+          .flatMap(i -> getReactCallerMono(step, sensors, i))
+          .blockLast(Duration.ofMillis(5000));
+
+      System.out.println("finished");
       execStatus.setFinishedAt(LocalDateTime.now());
       executionStatusRepository.save(execStatus);
 
     } catch (Exception e) {
       LOGGER.error("Error executing step {} - {}: {}", UNIQUE_INSTANCE_UUID, step, e);
       execStatus.setError(1);
-    } finally {
-      forkJoinPool.shutdown();
     }
 
+  }
+
+
+  private Mono<Integer> getReactCallerMono(ExecutionStep step, List<Sensor> sensors, Integer i) {
+    try {
+      int randomNr = getRandom(0, sensors.size());
+      Sensor sensor = sensors.get(randomNr);
+      doRequest(
+          ExecutionMethods.valueOf(step.getMethod()),
+          new SensorDataDTO(sensor.getGuid(), (double) randomNr, (double) randomNr / 10,
+              LocalDateTime.now()))
+          .filter(Objects::nonNull)
+          .flatMap(sd -> updateSensorStatus(randomNr, sd));
+    } catch (Exception e) {
+      LOGGER.error("Error calling receiver from {}, iteration {}, ex: {}",
+          UNIQUE_INSTANCE_UUID, i, e);
+    }
+    return Mono.just(i);
+  }
+
+
+  public Mono<Integer> updateSensorStatus(int randomNr, SensorDataDTO sd) {
+    return sensorsReactiveService.updateSensorStatus(randomNr, sd.getGuid());
   }
 
   /**
@@ -87,24 +107,24 @@ public class ReactiveCallerService {
    * @param sensors
    * @return
    */
-  private Consumer<Integer> getReactiveCallConsumer(ExecutionStep step, List<Sensor> sensors) {
-    return x -> {
-      try {
-        int randomNr = getRandom(0, sensors.size());
-        Sensor sensor = sensors.get(randomNr);
-        doRequest(
-            ExecutionMethods.valueOf(step.getMethod()),
-            new SensorDataDTO(sensor.getGuid(), (double) randomNr, (double) randomNr / 10,
-                LocalDateTime.now()))
-            .filter(Objects::nonNull)
-            .subscribe(sd -> sensorsService.updateSensorStatus(randomNr, sd.getGuid()));
-
-      } catch (Exception e) {
-        LOGGER.error("Error calling receiver from {}, iteration {}, ex: {}",
-            UNIQUE_INSTANCE_UUID, x, e);
-      }
-    };
-  }
+//  private Producer<Integer> getReactiveCallProducer(ExecutionStep step, List<Sensor> sensors) {
+//    return x -> {
+//      try {
+//        int randomNr = getRandom(0, sensors.size());
+//        Sensor sensor = sensors.get(randomNr);
+//        doRequest(
+//            ExecutionMethods.valueOf(step.getMethod()),
+//            new SensorDataDTO(sensor.getGuid(), (double) randomNr, (double) randomNr / 10,
+//                LocalDateTime.now()))
+//            .filter(Objects::nonNull)
+//            .subscribe(sd -> sensorsService.updateSensorStatus(randomNr, sd.getGuid()));
+//
+//      } catch (Exception e) {
+//        LOGGER.error("Error calling receiver from {}, iteration {}, ex: {}",
+//            UNIQUE_INSTANCE_UUID, x, e);
+//      }
+//    };
+//}
 
   /**
    * Call receiver based on Execution Method
@@ -115,11 +135,11 @@ public class ReactiveCallerService {
    */
   private Mono<SensorDataDTO> doRequest(ExecutionMethods method, SensorDataDTO data) {
     switch (method) {
-      case GET:
+      case REACT_GET:
         return doGetRequest(data);
-      case SAVE:
+      case REACT_SAVE:
         return doPostRequest(data);
-      case GET_SAVE:
+      case REACT_GET_SAVE:
         return doPutRequest(data);
       default:
         throw new IllegalArgumentException("Invalid option for method:" + method);

@@ -2,7 +2,6 @@ package ro.phd.vsp.roptreceiverreactive.controllers;
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +15,7 @@ import ro.phd.vsp.roptreceiverreactive.services.SensorDataService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/rt/sensor-data", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/rt/sensor-data")
 public class MainController {
 
   private final SensorDataService sensorDataService;

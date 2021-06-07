@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ro.phd.vsp.roptcaller.repositories.ExecutionStatusRepository;
 import ro.phd.vsp.roptcaller.services.ClasicCallerService;
+import ro.phd.vsp.roptcaller.services.ReactiveCallerService;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,6 +18,7 @@ import ro.phd.vsp.roptcaller.services.ClasicCallerService;
 public class TestController {
 
   private final ClasicCallerService clasicCallerService;
+  private final ReactiveCallerService reactiveCallerService;
   private final ExecutionStatusRepository executionStatusRepository;
 
   @Qualifier("uniqueInstanceUUID")
@@ -33,7 +35,8 @@ public class TestController {
   @GetMapping(path = "/fjp", produces = MediaType.APPLICATION_JSON_VALUE)
   public void testDeploy() {
 
-//TODO: add some implementation
+    reactiveCallerService.executeReactiveRequests();
+
   }
 
 }
