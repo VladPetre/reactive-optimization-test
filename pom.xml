@@ -21,6 +21,7 @@
 
   <modules>
     <module>ropt-caller</module>
+    <module>ropt-reactive-caller</module>
     <module>ropt-receiver</module>
     <module>ropt-receiver-reactive</module>
   </modules>
