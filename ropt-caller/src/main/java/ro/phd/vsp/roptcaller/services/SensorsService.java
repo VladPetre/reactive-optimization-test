@@ -1,11 +1,11 @@
-package ro.phd.vsp.roptcaller.services;
+package ro.phd.vsp.roptcallerreactive.services;
 
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ro.phd.vsp.roptcaller.models.Sensor;
-import ro.phd.vsp.roptcaller.repositories.SensorsRepository;
+import ro.phd.vsp.roptcallerreactive.models.Sensor;
+import ro.phd.vsp.roptcallerreactive.repositories.SensorsRepository;
 
 @Component
 @RequiredArgsConstructor

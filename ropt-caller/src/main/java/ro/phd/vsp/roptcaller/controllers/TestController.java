@@ -1,4 +1,4 @@
-package ro.phd.vsp.roptcaller.controllers;
+package ro.phd.vsp.roptcallerreactive.controllers;
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ro.phd.vsp.roptcaller.repositories.ExecutionStatusRepository;
-import ro.phd.vsp.roptcaller.services.ClasicCallerService;
+import ro.phd.vsp.roptcallerreactive.repositories.ExecutionStatusRepository;
+import ro.phd.vsp.roptcallerreactive.services.ClasicCallerService;
 
 @RestController
 @RequiredArgsConstructor

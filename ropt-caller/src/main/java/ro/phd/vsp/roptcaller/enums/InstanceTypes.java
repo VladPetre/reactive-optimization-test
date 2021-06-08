@@ -1,4 +1,4 @@
-package ro.phd.vsp.roptcaller.enums;
+package ro.phd.vsp.roptcallerreactive.enums;
 
 public enum InstanceTypes {
   CALLER,

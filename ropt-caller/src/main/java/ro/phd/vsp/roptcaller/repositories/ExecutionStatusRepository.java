@@ -1,4 +1,4 @@
-package ro.phd.vsp.roptcaller.repositories;
+package ro.phd.vsp.roptcallerreactive.repositories;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import ro.phd.vsp.roptcaller.models.ExecutionStatus;
+import ro.phd.vsp.roptcallerreactive.models.ExecutionStatus;
 
 public interface ExecutionStatusRepository extends JpaRepository<ExecutionStatus, Integer> {
 

@@ -1,4 +1,4 @@
-package ro.phd.vsp.roptcaller.dtos;
+package ro.phd.vsp.roptcallerreactive.dtos;
 
 import java.util.UUID;
 

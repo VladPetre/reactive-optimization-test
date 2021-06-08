@@ -1,4 +1,4 @@
-package ro.phd.vsp.roptcaller.exceptions;
+package ro.phd.vsp.roptcallerreactive.exceptions;
 
 public class DataNotFoundException extends RuntimeException {
 

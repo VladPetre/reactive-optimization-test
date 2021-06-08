@@ -1,4 +1,4 @@
-package ro.phd.vsp.roptcaller.services;
+package ro.phd.vsp.roptcallerreactive.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,14 +18,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import ro.phd.vsp.roptcaller.dtos.SensorDataDTO;
-import ro.phd.vsp.roptcaller.enums.ExecutionMethods;
-import ro.phd.vsp.roptcaller.enums.InstanceTypes;
-import ro.phd.vsp.roptcaller.models.ExecutionStatus;
-import ro.phd.vsp.roptcaller.models.ExecutionStep;
-import ro.phd.vsp.roptcaller.models.Sensor;
-import ro.phd.vsp.roptcaller.repositories.ExecutionStatusRepository;
-import ro.phd.vsp.roptcaller.utils.HttpUtils;
+import ro.phd.vsp.roptcallerreactive.dtos.SensorDataDTO;
+import ro.phd.vsp.roptcallerreactive.enums.ExecutionMethods;
+import ro.phd.vsp.roptcallerreactive.enums.InstanceTypes;
+import ro.phd.vsp.roptcallerreactive.models.ExecutionStatus;
+import ro.phd.vsp.roptcallerreactive.models.ExecutionStep;
+import ro.phd.vsp.roptcallerreactive.models.Sensor;
+import ro.phd.vsp.roptcallerreactive.repositories.ExecutionStatusRepository;
+import ro.phd.vsp.roptcallerreactive.utils.HttpUtils;
 
 @Service
 @RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package ro.phd.vsp.roptcaller.models;
+package ro.phd.vsp.roptcallerreactive.models;
 
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
