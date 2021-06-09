@@ -1,11 +1,12 @@
-package ro.phd.vsp.roptcallerreactive.services;
+package ro.phd.vsp.roptcaller.services;
 
 import java.util.List;
 import java.util.UUID;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ro.phd.vsp.roptcallerreactive.models.Sensor;
-import ro.phd.vsp.roptcallerreactive.repositories.SensorsRepository;
+import ro.phd.vsp.roptcaller.models.Sensor;
+import ro.phd.vsp.roptcaller.repositories.SensorsRepository;
 
 @Component
 @RequiredArgsConstructor
@@ -17,6 +18,7 @@ public class SensorsService {
     return sensorsRepository.findAll();
   }
 
+  @Transactional
   public Integer updateSensorStatus(Integer status, UUID sensorId) {
     return sensorsRepository.updateLastActive(status, sensorId);
   }

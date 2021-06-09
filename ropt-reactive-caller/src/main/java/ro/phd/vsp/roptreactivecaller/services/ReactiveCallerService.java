@@ -1,6 +1,7 @@
 package ro.phd.vsp.roptreactivecaller.services;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 import ro.phd.vsp.roptreactivecaller.dtos.SensorDataDTO;
 import ro.phd.vsp.roptreactivecaller.enums.ExecutionMethods;
 import ro.phd.vsp.roptreactivecaller.enums.InstanceTypes;
@@ -53,7 +55,7 @@ public class ReactiveCallerService {
       return;
     }
     ExecutionStatus execStatus = new ExecutionStatus(null, UNIQUE_INSTANCE_UUID,
-        InstanceTypes.CALLER.toString(),
+        InstanceTypes.CALLER_REACTIVE.toString(),
         LocalDateTime.now(), null, 0, step.getId());
 
     List<Sensor> sensors = sensorsService.getAllSensorsBlock();
@@ -62,19 +64,27 @@ public class ReactiveCallerService {
 
     try {
 
-//      for (int i = 0; i < step.getEntriesNumber(); i = i + 1000) {
-      Flux.range(0, step.getEntriesNumber())
-          .flatMap(aL -> getReactCallerMono(step, sensors, aL))
-          .blockLast();
-//      }
+      // v1
+//      Flux.range(0, step.getEntriesNumber())
+//          .flatMap(aL -> getReactCallerMono(step, sensors, aL))
+//          .blockLast();
 
-      System.out.println("finished");
+      Flux.range(0, step.getEntriesNumber())
+          .parallel()
+          .runOn(Schedulers.boundedElastic())
+          .flatMap(aL -> getReactCallerMono(step, sensors, aL))
+          .ordered(Comparator.comparing(Integer::intValue))
+          .subscribeOn(Schedulers.boundedElastic())
+          .blockLast();
+
       execStatus.setFinishedAt(LocalDateTime.now());
 
     } catch (Exception e) {
       LOGGER.error("Error executing step {} - {}: {}", UNIQUE_INSTANCE_UUID, step, e);
       execStatus.setError(1);
     }
+
+    System.out.println("finished");
     executionStatusRepository.save(execStatus).block();
 
   }

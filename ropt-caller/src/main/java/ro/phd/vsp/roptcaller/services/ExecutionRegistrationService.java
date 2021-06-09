@@ -1,4 +1,4 @@
-package ro.phd.vsp.roptcallerreactive.services;
+package ro.phd.vsp.roptcaller.services;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -10,8 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import ro.phd.vsp.roptcallerreactive.models.ExecutionStep;
-import ro.phd.vsp.roptcallerreactive.repositories.ExecutionStepsRepository;
+import ro.phd.vsp.roptcaller.models.ExecutionStep;
+import ro.phd.vsp.roptcaller.repositories.ExecutionStepsRepository;
 
 @Component
 @RequiredArgsConstructor
@@ -33,7 +33,7 @@ public class ExecutionRegistrationService {
     List<ExecutionStep> activeSteps = executionStepsRepository
         .findAll(Sort.by(Sort.Direction.ASC, "id"))
         .stream()
-        .filter(s -> s.getMethod().toUpperCase().indexOf("REACT_") == -1)
+        .filter(s -> !s.getMethod().toUpperCase().contains("REACT_"))
         .filter(ExecutionStep::getActive)
         .filter(s -> s.getLastActive().until(LocalDateTime.now(), ChronoUnit.SECONDS) <= s
             .getSecondsOffset())

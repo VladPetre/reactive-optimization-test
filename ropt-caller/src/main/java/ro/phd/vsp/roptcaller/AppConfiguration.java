@@ -1,4 +1,4 @@
-package ro.phd.vsp.roptcallerreactive;
+package ro.phd.vsp.roptcaller;
 
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,7 +13,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 @EnableScheduling
-@ComponentScan(basePackages = {"ro.phd.vsp.roptcallerreactive"})
+@ComponentScan(basePackages = {"ro.phd.vsp.roptcaller"})
 public class AppConfiguration {
 
   @Value("${ROPT_RECEIVER_URI}")

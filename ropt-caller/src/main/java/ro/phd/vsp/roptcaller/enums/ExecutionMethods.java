@@ -1,4 +1,4 @@
-package ro.phd.vsp.roptcallerreactive.enums;
+package ro.phd.vsp.roptcaller.enums;
 
 public enum ExecutionMethods {
   GET,

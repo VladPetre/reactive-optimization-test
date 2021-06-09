@@ -1,4 +1,4 @@
-package ro.phd.vsp.roptcallerreactive.models;
+package ro.phd.vsp.roptcaller.models;
 
 import java.util.UUID;
 import javax.persistence.Entity;
