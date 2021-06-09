@@ -19,7 +19,7 @@ public class SensorsService {
   }
 
   public Mono<Integer> updateSensorStatus(Integer status, UUID sensorId) {
-    return sensorsRepository.updateLastActive(status, sensorId);
+    return sensorsRepository.updateSensorStatus(status, sensorId);
   }
 
 }

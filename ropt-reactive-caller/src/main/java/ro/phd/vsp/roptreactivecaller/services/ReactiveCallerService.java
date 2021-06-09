@@ -1,6 +1,5 @@
 package ro.phd.vsp.roptreactivecaller.services;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -56,7 +54,7 @@ public class ReactiveCallerService {
     }
     ExecutionStatus execStatus = new ExecutionStatus(null, UNIQUE_INSTANCE_UUID,
         InstanceTypes.CALLER.toString(),
-        null, null, 0, step.getId());
+        LocalDateTime.now(), null, 0, step.getId());
 
     List<Sensor> sensors = sensorsService.getAllSensorsBlock();
 
@@ -64,28 +62,30 @@ public class ReactiveCallerService {
 
     try {
 
+//      for (int i = 0; i < step.getEntriesNumber(); i = i + 1000) {
       Flux.range(0, step.getEntriesNumber())
-          .flatMap(i -> getReactCallerMono(step, sensors, i))
-          .blockLast(Duration.ofMillis(5000));
+          .flatMap(aL -> getReactCallerMono(step, sensors, aL))
+          .blockLast();
+//      }
 
       System.out.println("finished");
       execStatus.setFinishedAt(LocalDateTime.now());
-      executionStatusRepository.save(execStatus);
 
     } catch (Exception e) {
       LOGGER.error("Error executing step {} - {}: {}", UNIQUE_INSTANCE_UUID, step, e);
       execStatus.setError(1);
     }
+    executionStatusRepository.save(execStatus).block();
 
   }
 
 
-  private Mono<Integer> getReactCallerMono(ExecutionStep step, List<Sensor> sensors, Integer i) {
+  private Mono<Integer> getReactCallerMono(ExecutionStep step, List<Sensor> sensors,
+      Integer i) {
     try {
       int randomNr = getRandom(0, sensors.size());
       Sensor sensor = sensors.get(randomNr);
-      doRequest(
-          ExecutionMethods.valueOf(step.getMethod()),
+      return doRequest(ExecutionMethods.valueOf(step.getMethod()),
           new SensorDataDTO(sensor.getGuid(), (double) randomNr, (double) randomNr / 10,
               LocalDateTime.now()))
           .filter(Objects::nonNull)
@@ -94,11 +94,10 @@ public class ReactiveCallerService {
       LOGGER.error("Error calling receiver from {}, iteration {}, ex: {}",
           UNIQUE_INSTANCE_UUID, i, e);
     }
-    return Mono.just(i);
+    return Mono.just(null);
   }
 
 
-  @Transactional
   public Mono<Integer> updateSensorStatus(int randomNr, SensorDataDTO sd) {
     return sensorsReactiveService.updateSensorStatus(randomNr, sd.getGuid());
   }

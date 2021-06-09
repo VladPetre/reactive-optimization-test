@@ -11,5 +11,5 @@ public interface SensorsReactiveRepository extends ReactiveCrudRepository<Sensor
 
   @Modifying
   @Query(value = "update sensors  set status = :status where guid = :sensorId")
-  Mono<Integer> updateLastActive(Integer status, UUID sensorId);
+  Mono<Integer> updateSensorStatus(Integer status, UUID sensorId);
 }
