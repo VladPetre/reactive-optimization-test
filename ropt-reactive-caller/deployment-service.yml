@@ -2,23 +2,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ropt-caller
+  name: ropt-reactive-caller
 spec:
   replicas: 1
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: ropt-caller
+      app: ropt-reactive-caller
   template:
     metadata:
-      name: ropt-caller-pod
+      name: ropt-reactive-caller-pod
       labels:
-        app: ropt-caller
+        app: ropt-reactive-caller
     spec:
       containers:
-        - name: ropt-caller-container
-          image: vladstep/ropt-caller:{{ropt-image-tag}}
+        - name: ropt-reactive-caller-container
+          image: vladstep/ropt-reactive-caller:{{ropt-image-tag}}
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -33,7 +33,7 @@ spec:
               successThreshold: 1
           readinessProbe:
             httpGet:
-              path: /actuator/health/liveness
+              path: /actuator/health/readiness
               port: 8080
               initialDelaySeconds: 30
               periodSeconds: 10
@@ -44,12 +44,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ropt-caller-cip-svc
+  name: ropt-reactive-caller-cip-svc
   labels:
-    app: ropt-caller
+    app: ropt-reactive-caller
 spec:
   selector:
-    app: ropt-caller
+    app: ropt-reactive-caller
   type: ClusterIP
   ports:
     - port: 8080
@@ -58,12 +58,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ropt-caller-svc
+  name: ropt-reactive-caller-svc
   labels:
-    app: ropt-caller
+    app: ropt-reactive-caller
 spec:
   selector:
-    app: ropt-caller
+    app: ropt-reactive-caller
   type: LoadBalancer
   ports:
     - port: 8081
