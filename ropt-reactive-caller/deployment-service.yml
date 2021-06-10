@@ -66,5 +66,5 @@ spec:
     app: ropt-reactive-caller
   type: LoadBalancer
   ports:
-    - port: 8081
+    - port: 8084
       targetPort: 8080
