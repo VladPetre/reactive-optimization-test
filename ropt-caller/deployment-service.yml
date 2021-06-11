@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ropt-caller
+  namespace: ropt
 spec:
   replicas: 1
   strategy:
@@ -44,6 +45,7 @@ spec:
               timeoutSeconds: 2
               failureThreshold: 1
               successThreshold: 1
+insecure-skip-tls-verify: true
 ---
 apiVersion: v1
 kind: Service
