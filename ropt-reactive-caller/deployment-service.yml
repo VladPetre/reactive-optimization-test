@@ -15,6 +15,10 @@ spec:
       name: ropt-reactive-caller-pod
       labels:
         app: ropt-reactive-caller
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       containers:
         - name: ropt-reactive-caller-container
