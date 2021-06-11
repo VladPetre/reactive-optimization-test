@@ -50,6 +50,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ropt-receiver-cip-svc
+  namespace: ropt
   labels:
     app: ropt-receiver
 spec:
@@ -64,6 +65,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ropt-receiver-svc
+  namespace: ropt
   labels:
     app: ropt-receiver
 spec:
