@@ -1,8 +1,7 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ropt-reactive-caller
+  name: ropt-react-caller
   namespace: ropt
 spec:
   replicas: 1
@@ -10,68 +9,54 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: ropt-reactive-caller
+      app: ropt-react-caller
   template:
     metadata:
-      name: ropt-reactive-caller-pod
+      name: ropt-react-caller-pod
       labels:
-        app: ropt-reactive-caller
+        app: ropt-react-caller
+        team: vsp
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
         prometheus.io/path: "/actuator/prometheus"
     spec:
       containers:
-        - name: ropt-reactive-caller-container
-          image: vladstep/ropt-reactive-caller:{{ropt-image-tag}}
+        - name: ropt-react-caller-container
+          image: vladstep/ropt-react-caller:{{ropt-image-tag}}
           imagePullPolicy: Always
           ports:
-            - containerPort: 8080
-          livenessProbe:
-            httpGet:
-              path: /actuator/health/liveness
-              port: 8080
-              initialDelaySeconds: 30
-              periodSeconds: 10
-              timeoutSeconds: 2
-              failureThreshold: 1
-              successThreshold: 1
-          readinessProbe:
-            httpGet:
-              path: /actuator/health/readiness
-              port: 8080
-              initialDelaySeconds: 30
-              periodSeconds: 10
-              timeoutSeconds: 2
-              failureThreshold: 1
-              successThreshold: 1
+            - name: caller-port
+              containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ropt-reactive-caller-cip-svc
+  name: ropt-react-caller-cip-svc
   namespace: ropt
   labels:
-    app: ropt-reactive-caller
+    app: ropt-react-caller-cip
+    vsp.monitor: caller-react-service
 spec:
   selector:
-    app: ropt-reactive-caller
+    app: ropt-react-caller
   type: ClusterIP
   ports:
-    - port: 8080
+    - name: caller-r-port
+      port: 8080
       targetPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ropt-reactive-caller-svc
+  name: ropt-react-caller-svc
   namespace: ropt
   labels:
-    app: ropt-reactive-caller
+    app: ropt-react-caller
 spec:
   selector:
-    app: ropt-reactive-caller
+    app: ropt-react-caller
   type: LoadBalancer
   ports:
-    - port: 8084
+    - port: 8081
       targetPort: 8080

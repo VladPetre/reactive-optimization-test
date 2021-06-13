@@ -1,0 +1,104 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ropt-caller-svc-monitor
+  namespace: monitoring
+  labels:
+    app: prometheus
+    prometheus: service-prometheus
+    team: vsp
+    release: prom-stack
+spec:
+  selector:
+    matchLabels:
+      #      app: ropt-caller-cip
+      vsp.monitor: caller-service
+  namespaceSelector:
+    matchNames:
+      - ropt
+  endpoints:
+    - port: caller-port
+      path: '/actuator/prometheus'
+      interval: 10s
+      honorLabels: true
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ropt-react-caller-svc-monitor
+  namespace: monitoring
+  labels:
+    app: prometheus
+    prometheus: service-prometheus
+    team: vsp
+    release: prom-stack
+spec:
+  selector:
+    matchLabels:
+      vsp.monitor: caller-react-service
+  namespaceSelector:
+    matchNames:
+      - ropt
+  endpoints:
+    - port: caller-r-port
+      path: '/actuator/prometheus'
+      interval: 10s
+      honorLabels: true
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ropt-receiver-svc-monitor
+  namespace: monitoring
+  labels:
+    app: prometheus
+    prometheus: service-prometheus
+    team: vsp
+    release: prom-stack
+spec:
+  selector:
+    matchLabels:
+      vsp.monitor: receiver-service
+  namespaceSelector:
+    matchNames:
+      - ropt
+  endpoints:
+    - port: receiver-port
+      path: '/actuator/prometheus'
+      interval: 10s
+      honorLabels: true
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ropt-react-receiver-svc-monitor
+  namespace: monitoring
+  labels:
+    app: prometheus
+    prometheus: service-prometheus
+    team: vsp
+    release: prom-stack
+spec:
+  selector:
+    matchLabels:
+      vsp.monitor: receiver-react-service
+  namespaceSelector:
+    matchNames:
+      - ropt
+  endpoints:
+    - port: receiver-r-port
+      path: '/actuator/prometheus'
+      interval: 10s
+      honorLabels: true
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prom-vsp
+  namespace: monitoring
+spec:
+  serviceAccountName: prom-stack-kube-prometheus-prometheus
+  serviceMonitorSelector:
+    matchLabels:
+      team: vsp
+  enableAdminAPI: false
