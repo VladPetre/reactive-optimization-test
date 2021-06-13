@@ -1,33 +1,33 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: ropt-reactive-caller
-  namespace: ropt
-spec:
-  replicas: 1
-  strategy:
-    type: Recreate
-  selector:
-    matchLabels:
-      app: ropt-reactive-caller
-  template:
-    metadata:
-      name: ropt-reactive-caller-pod
-      labels:
-        app: ropt-reactive-caller
-        team: vsp
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8080"
-        prometheus.io/path: "/actuator/prometheus"
-    spec:
-      containers:
-        - name: ropt-reactive-caller-container
-          image: vladstep/ropt-reactive-caller:{{ropt-image-tag}}
-          imagePullPolicy: Always
-          ports:
-            - name: caller-r-port
-              containerPort: 8080
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: ropt-reactive-caller
+#  namespace: ropt
+#spec:
+#  replicas: 1
+#  strategy:
+#    type: Recreate
+#  selector:
+#    matchLabels:
+#      app: ropt-reactive-caller
+#  template:
+#    metadata:
+#      name: ropt-reactive-caller-pod
+#      labels:
+#        app: ropt-reactive-caller
+#        team: vsp
+#      annotations:
+#        prometheus.io/scrape: "true"
+#        prometheus.io/port: "8080"
+#        prometheus.io/path: "/actuator/prometheus"
+#    spec:
+#      containers:
+#        - name: ropt-reactive-caller-container
+#          image: vladstep/ropt-reactive-caller:{{ropt-image-tag}}
+#          imagePullPolicy: Always
+#          ports:
+#            - name: caller-r-port
+#              containerPort: 8080
 ---
 apiVersion: v1
 kind: Service

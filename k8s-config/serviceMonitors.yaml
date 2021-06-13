@@ -105,4 +105,7 @@ spec:
   serviceMonitorSelector:
     matchLabels:
       team: vsp
+  podMonitorSelector:
+    matchLabels:
+      team: vsp
   enableAdminAPI: false
