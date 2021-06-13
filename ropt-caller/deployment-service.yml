@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ropt-caller
-#  namespace: ropt
+  namespace: ropt
 spec:
   replicas: 1
   strategy:
@@ -51,7 +51,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ropt-caller-cip-svc
-  namespace: ropt
+    namespace: ropt
   labels:
     app: ropt-caller
 spec:
