@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ropt-react-caller
+  name: ropt-reactive-caller
   namespace: ropt
 spec:
   replicas: 1
@@ -9,12 +9,12 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: ropt-react-caller
+      app: ropt-reactive-caller
   template:
     metadata:
-      name: ropt-react-caller-pod
+      name: ropt-reactive-caller-pod
       labels:
-        app: ropt-react-caller
+        app: ropt-reactive-caller
         team: vsp
       annotations:
         prometheus.io/scrape: "true"
@@ -22,24 +22,24 @@ spec:
         prometheus.io/path: "/actuator/prometheus"
     spec:
       containers:
-        - name: ropt-react-caller-container
-          image: vladstep/ropt-react-caller:{{ropt-image-tag}}
+        - name: ropt-reactive-caller-container
+          image: vladstep/ropt-reactive-caller:{{ropt-image-tag}}
           imagePullPolicy: Always
           ports:
-            - name: caller-port
+            - name: caller-r-port
               containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ropt-react-caller-cip-svc
+  name: ropt-reactive-caller-cip-svc
   namespace: ropt
   labels:
-    app: ropt-react-caller-cip
+    app: ropt-reactive-caller-cip
     vsp.monitor: caller-react-service
 spec:
   selector:
-    app: ropt-react-caller
+    app: ropt-reactive-caller
   type: ClusterIP
   ports:
     - name: caller-r-port
@@ -49,13 +49,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ropt-react-caller-svc
+  name: ropt-reactive-caller-svc
   namespace: ropt
   labels:
-    app: ropt-react-caller
+    app: ropt-reactive-caller
 spec:
   selector:
-    app: ropt-react-caller
+    app: ropt-reactive-caller
   type: LoadBalancer
   ports:
     - port: 8081

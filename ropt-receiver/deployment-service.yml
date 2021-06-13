@@ -26,7 +26,7 @@ spec:
           image: vladstep/ropt-receiver:{{ropt-image-tag}}
           imagePullPolicy: Always
           ports:
-            - name: receiver-r-port
+            - name: receiver-port
               containerPort: 8080
 ---
 apiVersion: v1
@@ -36,13 +36,13 @@ metadata:
   namespace: ropt
   labels:
     app: ropt-receiver-cip
-    vsp.monitor: receiver-react-service
+    vsp.monitor: receiver-service
 spec:
   selector:
     app: ropt-receiver
   type: ClusterIP
   ports:
-    - name: receiver-r-port
+    - name: receiver-port
       port: 8080
       targetPort: 8080
 ---

@@ -1,3 +1,4 @@
+### caller
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -22,6 +23,7 @@ spec:
       interval: 10s
       honorLabels: true
 ---
+### react caller
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -45,6 +47,7 @@ spec:
       interval: 10s
       honorLabels: true
 ---
+### receiver
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -68,6 +71,7 @@ spec:
       interval: 10s
       honorLabels: true
 ---
+### react receiver
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
