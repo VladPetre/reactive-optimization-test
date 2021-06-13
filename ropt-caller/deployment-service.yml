@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ropt-caller
-  namespace: ropt
+#  namespace: ropt
 spec:
   replicas: 1
   strategy:
