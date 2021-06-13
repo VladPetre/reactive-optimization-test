@@ -59,8 +59,9 @@ spec:
     app: ropt-caller
   type: ClusterIP
   ports:
-    - port: 8080
-      targetPort: 8080
+    - name: ropt-caller-cip-svc-port
+      port: 8080
+      targetPort: ropt-caller-cip-svc-port
 ---
 apiVersion: v1
 kind: Service
