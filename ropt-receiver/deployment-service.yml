@@ -1,33 +1,33 @@
-#apiVersion: apps/v1
-#kind: Deployment
-#metadata:
-#  name: ropt-receiver
-#  namespace: ropt
-#spec:
-#  replicas: 1
-#  strategy:
-#    type: Recreate
-#  selector:
-#    matchLabels:
-#      app: ropt-receiver
-#  template:
-#    metadata:
-#      name: ropt-receiver-pod
-#      labels:
-#        app: ropt-receiver
-#        team: vsp
-#      annotations:
-#        prometheus.io/scrape: "true"
-#        prometheus.io/port: "8080"
-#        prometheus.io/path: "/actuator/prometheus"
-#    spec:
-#      containers:
-#        - name: ropt-receiver-container
-#          image: vladstep/ropt-receiver:{{ropt-image-tag}}
-#          imagePullPolicy: Always
-#          ports:
-#            - name: receiver-port
-#              containerPort: 8080
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ropt-receiver
+  namespace: ropt
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: ropt-receiver
+  template:
+    metadata:
+      name: ropt-receiver-pod
+      labels:
+        app: ropt-receiver
+        team: vsp
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
+    spec:
+      containers:
+        - name: ropt-receiver-container
+          image: vladstep/ropt-receiver:{{ropt-image-tag}}
+          imagePullPolicy: Always
+          ports:
+            - name: receiver-port
+              containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
@@ -58,5 +58,5 @@ spec:
     app: ropt-receiver
   type: LoadBalancer
   ports:
-    - port: 8081
+    - port: 8083
       targetPort: 8080
