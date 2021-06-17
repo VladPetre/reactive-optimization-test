@@ -79,14 +79,14 @@ INSERT INTO execution_steps (entries_number, method, status, threads_number, act
                              receiver_nr_instances, seconds_offset)
 VALUES (1000, 'GET', 1, 4, false, 1, 300),
        (1000, 'REACT_GET', 1, 4, false, 1, 300),
-       (1000, 'GET_SAVE', 1, 4, false, 1, 300),
+       (1000, 'SAVE', 1, 4, false, 1, 300),
        (1000, 'REACT_SAVE', 1, 4, false, 1, 300),
        (1000, 'GET_SAVE', 1, 4, false, 1, 300),
        (1000, 'REACT_GET_SAVE', 1, 4, false, 1, 300),
 
        (1000, 'GET', 1, 4, false, 3, 300),
        (1000, 'REACT_GET', 1, 4, false, 3, 300),
-       (1000, 'GET_SAVE', 1, 4, false, 3, 300),
+       (1000, 'SAVE', 1, 4, false, 3, 300),
        (1000, 'REACT_SAVE', 1, 4, false, 3, 300),
        (1000, 'GET_SAVE', 1, 4, false, 3, 300),
        (1000, 'REACT_GET_SAVE', 1, 4, false, 3, 300);
