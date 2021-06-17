@@ -20,7 +20,7 @@ spec:
   endpoints:
     - port: caller-port
       path: '/actuator/prometheus'
-      interval: 10s
+      interval: 3s
       honorLabels: true
 ---
 ### react caller
@@ -44,7 +44,7 @@ spec:
   endpoints:
     - port: caller-r-port
       path: '/actuator/prometheus'
-      interval: 10s
+      interval: 3s
       honorLabels: true
 ---
 ### receiver
@@ -68,7 +68,7 @@ spec:
   endpoints:
     - port: receiver-port
       path: '/actuator/prometheus'
-      interval: 10s
+      interval: 3s
       honorLabels: true
 ---
 ### react receiver
@@ -92,7 +92,7 @@ spec:
   endpoints:
     - port: receiver-r-port
       path: '/actuator/prometheus'
-      interval: 10s
+      interval: 3s
       honorLabels: true
 ---
 apiVersion: monitoring.coreos.com/v1
