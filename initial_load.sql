@@ -1,14 +1,95 @@
 CREATE
     EXTENSION IF NOT EXISTS "pgcrypto";
 
+
+--####### TABLES ##########
+create table execution_steps
+(
+    id                    bigserial not null
+        constraint execution_steps_pkey
+            primary key,
+    active                boolean,
+    entries_number        integer,
+    last_active           timestamp,
+    method                varchar(255),
+    receiver_nr_instances integer,
+    seconds_offset        bigint,
+    status                integer,
+    threads_number        integer
+);
+
+alter table execution_steps
+    owner to postgres;
+
+---------
+
+create table execution_steps
+(
+    id                    bigserial not null
+        constraint execution_steps_pkey
+            primary key,
+    active                boolean,
+    entries_number        integer,
+    last_active           timestamp,
+    method                varchar(255),
+    receiver_nr_instances integer,
+    seconds_offset        bigint,
+    status                integer,
+    threads_number        integer
+);
+
+alter table execution_steps
+    owner to postgres;
+
+-----------
+
+create table sensors
+(
+    guid        uuid not null
+        constraint sensors_pkey
+            primary key,
+    location    varchar(255),
+    sensor_type varchar(255),
+    status      integer
+);
+
+alter table sensors
+    owner to postgres;
+
+------------
+
+create table sensors_data
+(
+    guid       uuid not null
+        constraint sensors_data_pkey
+            primary key,
+    battery    double precision,
+    updated_on timestamp,
+    value      double precision
+);
+
+alter table sensors_data
+    owner to postgres;
+
+------------
+
+-- ######## POPULATE ###########
+
 INSERT INTO execution_steps (entries_number, method, status, threads_number, active,
                              receiver_nr_instances, seconds_offset)
-VALUES (100000, 'GET', 1, 4, false, 1, 300),
-       (100000, 'GET', 1, 16, false, 1, 300),
-       (100000, 'GET', 1, 32, false, 1, 300),
-       (100000, 'REACT-GET', 1, 4, false, 1, 300),
-       (100000, 'REACT-GET', 1, 16, false, 1, 300),
-       (100000, 'REACT-GET', 1, 32, false, 1, 300);
+VALUES (1000, 'GET', 1, 4, false, 1, 300),
+       (1000, 'REACT_GET', 1, 4, false, 1, 300),
+       (1000, 'GET_SAVE', 1, 4, false, 1, 300),
+       (1000, 'REACT_SAVE', 1, 4, false, 1, 300),
+       (1000, 'GET_SAVE', 1, 4, false, 1, 300),
+       (1000, 'REACT_GET_SAVE', 1, 4, false, 1, 300),
+
+       (1000, 'GET', 1, 4, false, 3, 300),
+       (1000, 'REACT_GET', 1, 4, false, 3, 300),
+       (1000, 'GET_SAVE', 1, 4, false, 3, 300),
+       (1000, 'REACT_SAVE', 1, 4, false, 3, 300),
+       (1000, 'GET_SAVE', 1, 4, false, 3, 300),
+       (1000, 'REACT_GET_SAVE', 1, 4, false, 3, 300);
 
 INSERT INTO sensors(guid, sensor_type, location, status)
 VALUES ('1be2e67f-f8bb-4995-a714-8311f6675df1', 'Powernet', 'Vanderveer Street', 2),
