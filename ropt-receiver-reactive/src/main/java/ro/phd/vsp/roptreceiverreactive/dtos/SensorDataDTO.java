@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import ro.phd.vsp.roptreceiverreactive.models.SensorData;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,4 +20,12 @@ public class SensorDataDTO {
   private Double value;
   private Double battery;
   private LocalDateTime updatedOn;
+
+  public SensorDataDTO(SensorData data) {
+    this(data.getGuid(), data.getValue(), data.getBattery(), data.getUpdatedOn());
+  }
+
+  public SensorDataDTO(SensorDataDTO that) {
+    this(that.getGuid(), that.getValue(), that.getBattery(), that.getUpdatedOn());
+  }
 }

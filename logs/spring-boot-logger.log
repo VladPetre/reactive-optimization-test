@@ -1,84 +1,40 @@
-2021-06-16 21:15:12,924 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting RoptCallerApplication using Java 11.0.8 on DESKTOP-5C8MESV with PID 8120 (C:\Projects\phd\reactive-optimization-test\ropt-caller\target\classes started by vlads in C:\Projects\phd\reactive-optimization-test)
-2021-06-16 21:15:12,940 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: local
-2021-06-16 21:15:13,072 INFO org.springframework.boot.logging.DeferredLog [restartedMain] Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2021-06-16 21:15:13,072 INFO org.springframework.boot.logging.DeferredLog [restartedMain] For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2021-06-16 21:15:15,959 INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2021-06-16 21:15:16,184 INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 199 ms. Found 4 JPA repository interfaces.
-2021-06-16 21:15:17,803 INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer [restartedMain] Tomcat initialized with port(s): 8091 (http)
-2021-06-16 21:15:17,834 INFO org.apache.juli.logging.DirectJDKLog [restartedMain] Initializing ProtocolHandler ["http-nio-8091"]
-2021-06-16 21:15:17,834 INFO org.apache.juli.logging.DirectJDKLog [restartedMain] Starting service [Tomcat]
-2021-06-16 21:15:17,834 INFO org.apache.juli.logging.DirectJDKLog [restartedMain] Starting Servlet engine: [Apache Tomcat/9.0.45]
-2021-06-16 21:15:18,129 INFO org.apache.juli.logging.DirectJDKLog [restartedMain] Initializing Spring embedded WebApplicationContext
-2021-06-16 21:15:18,129 INFO org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext [restartedMain] Root WebApplicationContext: initialization completed in 5057 ms
-2021-06-16 21:15:18,887 INFO org.hibernate.jpa.internal.util.LogHelper [restartedMain] HHH000204: Processing PersistenceUnitInfo [name: default]
-2021-06-16 21:15:19,035 INFO org.hibernate.Version [restartedMain] HHH000412: Hibernate ORM core version 5.4.30.Final
-2021-06-16 21:15:19,329 INFO org.hibernate.annotations.common.reflection.java.JavaReflectionManager [restartedMain] HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2021-06-16 21:15:19,599 INFO com.zaxxer.hikari.HikariDataSource [restartedMain] HikariPool-1 - Starting...
-2021-06-16 21:15:19,910 INFO com.zaxxer.hikari.HikariDataSource [restartedMain] HikariPool-1 - Start completed.
-2021-06-16 21:15:19,940 INFO org.hibernate.dialect.Dialect [restartedMain] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
-2021-06-16 21:15:22,518 INFO org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator [restartedMain] HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2021-06-16 21:15:22,533 INFO org.springframework.orm.jpa.AbstractEntityManagerFactoryBean [restartedMain] Initialized JPA EntityManagerFactory for persistence unit 'default'
-2021-06-16 21:15:22,630 INFO org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer [restartedMain] LiveReload server is running on port 35729
-2021-06-16 21:15:23,799 WARN org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration [restartedMain] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2021-06-16 21:15:23,959 INFO org.springframework.scheduling.concurrent.ExecutorConfigurationSupport [restartedMain] Initializing ExecutorService 'applicationTaskExecutor'
-2021-06-16 21:15:24,995 INFO org.springframework.scheduling.concurrent.ExecutorConfigurationSupport [restartedMain] Initializing ExecutorService 'taskScheduler'
-2021-06-16 21:15:25,106 INFO org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver [restartedMain] Exposing 4 endpoint(s) beneath base path '/actuator'
-2021-06-16 21:15:25,193 INFO org.apache.juli.logging.DirectJDKLog [restartedMain] Starting ProtocolHandler ["http-nio-8091"]
-2021-06-16 21:15:25,243 INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer [restartedMain] Tomcat started on port(s): 8091 (http) with context path ''
-2021-06-16 21:15:25,289 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started RoptCallerApplication in 14.161 seconds (JVM running for 24.027)
-2021-06-16 21:15:26,295 INFO org.apache.juli.logging.DirectJDKLog [RMI TCP Connection(1)-172.24.16.1] Initializing Spring DispatcherServlet 'dispatcherServlet'
-2021-06-16 21:15:26,295 INFO org.springframework.web.servlet.FrameworkServlet [RMI TCP Connection(1)-172.24.16.1] Initializing Servlet 'dispatcherServlet'
-2021-06-16 21:15:26,295 INFO org.springframework.web.servlet.FrameworkServlet [RMI TCP Connection(1)-172.24.16.1] Completed initialization in 0 ms
-2021-06-16 21:15:28,574 ERROR ro.phd.vsp.roptcaller.services.ExecutionRegistrationService [scheduling-1] RT: None or Many steps were active!
-2021-06-16 21:15:33,288 ERROR ro.phd.vsp.roptcaller.services.ExecutionRegistrationService [scheduling-1] RT: None or Many steps were active!
-2021-06-16 21:15:38,285 ERROR ro.phd.vsp.roptcaller.services.ExecutionRegistrationService [scheduling-1] RT: None or Many steps were active!
-2021-06-16 21:15:43,289 ERROR ro.phd.vsp.roptcaller.services.ExecutionRegistrationService [scheduling-1] RT: None or Many steps were active!
-2021-06-16 21:15:48,287 ERROR ro.phd.vsp.roptcaller.services.ExecutionRegistrationService [scheduling-1] RT: None or Many steps were active!
-2021-06-16 21:15:53,302 ERROR ro.phd.vsp.roptcaller.services.ExecutionRegistrationService [scheduling-1] RT: None or Many steps were active!
-2021-06-16 21:15:58,282 ERROR ro.phd.vsp.roptcaller.services.ExecutionRegistrationService [scheduling-1] RT: None or Many steps were active!
-2021-06-16 21:16:03,280 ERROR ro.phd.vsp.roptcaller.services.ExecutionRegistrationService [scheduling-1] RT: None or Many steps were active!
-2021-06-16 21:16:08,284 ERROR ro.phd.vsp.roptcaller.services.ExecutionRegistrationService [scheduling-1] RT: None or Many steps were active!
-2021-06-16 21:16:13,290 ERROR ro.phd.vsp.roptcaller.services.ExecutionRegistrationService [scheduling-1] RT: None or Many steps were active!
-2021-06-16 21:16:18,294 ERROR ro.phd.vsp.roptcaller.services.ExecutionRegistrationService [scheduling-1] RT: None or Many steps were active!
-2021-06-16 21:16:20,140 INFO org.springframework.scheduling.concurrent.ExecutorConfigurationSupport [SpringContextShutdownHook] Shutting down ExecutorService 'taskScheduler'
-2021-06-16 21:16:20,160 INFO org.springframework.scheduling.concurrent.ExecutorConfigurationSupport [SpringContextShutdownHook] Shutting down ExecutorService 'applicationTaskExecutor'
-2021-06-16 21:16:20,160 INFO org.springframework.orm.jpa.AbstractEntityManagerFactoryBean [SpringContextShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
-2021-06-16 21:16:20,216 INFO com.zaxxer.hikari.HikariDataSource [SpringContextShutdownHook] HikariPool-1 - Shutdown initiated...
-2021-06-16 21:16:20,250 INFO com.zaxxer.hikari.HikariDataSource [SpringContextShutdownHook] HikariPool-1 - Shutdown completed.
-2021-06-16 21:16:36,243 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting RoptCallerApplication using Java 11.0.8 on DESKTOP-5C8MESV with PID 9108 (C:\Projects\phd\reactive-optimization-test\ropt-caller\target\classes started by vlads in C:\Projects\phd\reactive-optimization-test)
-2021-06-16 21:16:36,243 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: local
-2021-06-16 21:16:36,363 INFO org.springframework.boot.logging.DeferredLog [restartedMain] Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2021-06-16 21:16:36,363 INFO org.springframework.boot.logging.DeferredLog [restartedMain] For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2021-06-16 21:16:38,906 INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2021-06-16 21:16:39,126 INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 199 ms. Found 4 JPA repository interfaces.
-2021-06-16 21:16:40,487 INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer [restartedMain] Tomcat initialized with port(s): 8091 (http)
-2021-06-16 21:16:40,502 INFO org.apache.juli.logging.DirectJDKLog [restartedMain] Initializing ProtocolHandler ["http-nio-8091"]
-2021-06-16 21:16:40,502 INFO org.apache.juli.logging.DirectJDKLog [restartedMain] Starting service [Tomcat]
-2021-06-16 21:16:40,502 INFO org.apache.juli.logging.DirectJDKLog [restartedMain] Starting Servlet engine: [Apache Tomcat/9.0.45]
-2021-06-16 21:16:40,728 INFO org.apache.juli.logging.DirectJDKLog [restartedMain] Initializing Spring embedded WebApplicationContext
-2021-06-16 21:16:40,728 INFO org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext [restartedMain] Root WebApplicationContext: initialization completed in 4365 ms
-2021-06-16 21:16:41,383 INFO org.hibernate.jpa.internal.util.LogHelper [restartedMain] HHH000204: Processing PersistenceUnitInfo [name: default]
-2021-06-16 21:16:41,493 INFO org.hibernate.Version [restartedMain] HHH000412: Hibernate ORM core version 5.4.30.Final
-2021-06-16 21:16:41,847 INFO org.hibernate.annotations.common.reflection.java.JavaReflectionManager [restartedMain] HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-2021-06-16 21:16:42,074 INFO com.zaxxer.hikari.HikariDataSource [restartedMain] HikariPool-1 - Starting...
-2021-06-16 21:16:42,411 INFO com.zaxxer.hikari.HikariDataSource [restartedMain] HikariPool-1 - Start completed.
-2021-06-16 21:16:42,442 INFO org.hibernate.dialect.Dialect [restartedMain] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
-2021-06-16 21:16:44,668 INFO org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator [restartedMain] HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2021-06-16 21:16:44,688 INFO org.springframework.orm.jpa.AbstractEntityManagerFactoryBean [restartedMain] Initialized JPA EntityManagerFactory for persistence unit 'default'
-2021-06-16 21:16:44,765 INFO org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer [restartedMain] LiveReload server is running on port 35729
-2021-06-16 21:16:45,887 WARN org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration [restartedMain] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2021-06-16 21:16:46,012 INFO org.springframework.scheduling.concurrent.ExecutorConfigurationSupport [restartedMain] Initializing ExecutorService 'applicationTaskExecutor'
-2021-06-16 21:16:46,841 INFO org.springframework.scheduling.concurrent.ExecutorConfigurationSupport [restartedMain] Initializing ExecutorService 'taskScheduler'
-2021-06-16 21:16:46,953 INFO org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver [restartedMain] Exposing 4 endpoint(s) beneath base path '/actuator'
-2021-06-16 21:16:47,031 INFO org.apache.juli.logging.DirectJDKLog [restartedMain] Starting ProtocolHandler ["http-nio-8091"]
-2021-06-16 21:16:47,099 INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer [restartedMain] Tomcat started on port(s): 8091 (http) with context path ''
-2021-06-16 21:16:47,141 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started RoptCallerApplication in 12.298 seconds (JVM running for 18.78)
-2021-06-16 21:16:48,079 INFO org.apache.juli.logging.DirectJDKLog [RMI TCP Connection(2)-172.24.16.1] Initializing Spring DispatcherServlet 'dispatcherServlet'
-2021-06-16 21:16:48,079 INFO org.springframework.web.servlet.FrameworkServlet [RMI TCP Connection(2)-172.24.16.1] Initializing Servlet 'dispatcherServlet'
-2021-06-16 21:16:48,079 INFO org.springframework.web.servlet.FrameworkServlet [RMI TCP Connection(2)-172.24.16.1] Completed initialization in 0 ms
-2021-06-16 21:16:50,380 ERROR ro.phd.vsp.roptcaller.services.ExecutionRegistrationService [scheduling-1] RT: None or Many steps were active!
-2021-06-16 21:16:54,854 INFO org.springframework.scheduling.concurrent.ExecutorConfigurationSupport [SpringContextShutdownHook] Shutting down ExecutorService 'taskScheduler'
-2021-06-16 21:16:54,860 INFO org.springframework.scheduling.concurrent.ExecutorConfigurationSupport [SpringContextShutdownHook] Shutting down ExecutorService 'applicationTaskExecutor'
-2021-06-16 21:16:54,860 INFO org.springframework.orm.jpa.AbstractEntityManagerFactoryBean [SpringContextShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
-2021-06-16 21:16:54,870 INFO com.zaxxer.hikari.HikariDataSource [SpringContextShutdownHook] HikariPool-1 - Shutdown initiated...
-2021-06-16 21:16:54,881 INFO com.zaxxer.hikari.HikariDataSource [SpringContextShutdownHook] HikariPool-1 - Shutdown completed.
+2021-06-25 23:09:55,309 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting RoptReceiverReactiveApplication using Java 11.0.8 on DESKTOP-5C8MESV with PID 10112 (C:\Projects\phd\reactive-optimization-test\ropt-receiver-reactive\target\classes started by vlads in C:\Projects\phd\reactive-optimization-test)
+2021-06-25 23:09:55,320 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: local
+2021-06-25 23:09:55,439 INFO org.springframework.boot.logging.DeferredLog [restartedMain] Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-06-25 23:09:55,440 INFO org.springframework.boot.logging.DeferredLog [restartedMain] For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-06-25 23:09:57,358 INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2021-06-25 23:09:57,492 INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 124 ms. Found 1 R2DBC repository interfaces.
+2021-06-25 23:09:58,839 INFO org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer [restartedMain] LiveReload server is running on port 35729
+2021-06-25 23:09:59,628 INFO org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver [restartedMain] Exposing 4 endpoint(s) beneath base path '/actuator'
+2021-06-25 23:10:01,173 INFO org.springframework.boot.web.embedded.netty.NettyWebServer [restartedMain] Netty started on port 8093
+2021-06-25 23:10:01,217 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started RoptReceiverReactiveApplication in 7.066 seconds (JVM running for 12.182)
+2021-06-25 23:18:54,864 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting RoptReceiverReactiveApplication using Java 11.0.8 on DESKTOP-5C8MESV with PID 13648 (C:\Projects\phd\reactive-optimization-test\ropt-receiver-reactive\target\classes started by vlads in C:\Projects\phd\reactive-optimization-test)
+2021-06-25 23:18:54,872 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: local
+2021-06-25 23:18:55,024 INFO org.springframework.boot.logging.DeferredLog [restartedMain] Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-06-25 23:18:55,025 INFO org.springframework.boot.logging.DeferredLog [restartedMain] For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-06-25 23:18:56,324 INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2021-06-25 23:18:56,402 INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 72 ms. Found 1 R2DBC repository interfaces.
+2021-06-25 23:18:57,333 INFO org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer [restartedMain] LiveReload server is running on port 35729
+2021-06-25 23:18:58,014 INFO org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver [restartedMain] Exposing 4 endpoint(s) beneath base path '/actuator'
+2021-06-25 23:18:59,034 INFO org.springframework.boot.web.embedded.netty.NettyWebServer [restartedMain] Netty started on port 8093
+2021-06-25 23:18:59,051 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started RoptReceiverReactiveApplication in 5.582 seconds (JVM running for 7.999)
+2021-06-25 23:24:43,941 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting RoptReceiverReactiveApplication using Java 11.0.8 on DESKTOP-5C8MESV with PID 20476 (C:\Projects\phd\reactive-optimization-test\ropt-receiver-reactive\target\classes started by vlads in C:\Projects\phd\reactive-optimization-test)
+2021-06-25 23:24:43,952 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: local
+2021-06-25 23:24:44,101 INFO org.springframework.boot.logging.DeferredLog [restartedMain] Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-06-25 23:24:44,102 INFO org.springframework.boot.logging.DeferredLog [restartedMain] For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-06-25 23:24:45,879 INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2021-06-25 23:24:45,971 INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 85 ms. Found 1 R2DBC repository interfaces.
+2021-06-25 23:24:47,233 INFO org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer [restartedMain] LiveReload server is running on port 35729
+2021-06-25 23:24:47,925 INFO org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver [restartedMain] Exposing 4 endpoint(s) beneath base path '/actuator'
+2021-06-25 23:24:49,333 INFO org.springframework.boot.web.embedded.netty.NettyWebServer [restartedMain] Netty started on port 8093
+2021-06-25 23:24:49,399 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started RoptReceiverReactiveApplication in 7.341 seconds (JVM running for 10.103)
+2021-06-25 23:27:51,596 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Starting RoptReceiverReactiveApplication using Java 11.0.8 on DESKTOP-5C8MESV with PID 11744 (C:\Projects\phd\reactive-optimization-test\ropt-receiver-reactive\target\classes started by vlads in C:\Projects\phd\reactive-optimization-test)
+2021-06-25 23:27:51,601 INFO org.springframework.boot.SpringApplication [restartedMain] The following profiles are active: local
+2021-06-25 23:27:51,709 INFO org.springframework.boot.logging.DeferredLog [restartedMain] Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-06-25 23:27:51,710 INFO org.springframework.boot.logging.DeferredLog [restartedMain] For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-06-25 23:27:53,210 INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2021-06-25 23:27:53,273 INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 58 ms. Found 1 R2DBC repository interfaces.
+2021-06-25 23:27:54,063 INFO org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer [restartedMain] LiveReload server is running on port 35729
+2021-06-25 23:27:54,736 INFO org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver [restartedMain] Exposing 4 endpoint(s) beneath base path '/actuator'
+2021-06-25 23:27:55,835 INFO org.springframework.boot.web.embedded.netty.NettyWebServer [restartedMain] Netty started on port 8093
+2021-06-25 23:27:55,861 INFO org.springframework.boot.StartupInfoLogger [restartedMain] Started RoptReceiverReactiveApplication in 5.2 seconds (JVM running for 6.94)
