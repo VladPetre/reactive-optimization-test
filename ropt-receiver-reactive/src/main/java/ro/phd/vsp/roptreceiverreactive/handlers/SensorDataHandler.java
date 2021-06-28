@@ -57,7 +57,7 @@ public class SensorDataHandler {
         .flatMap(data ->
             created(UriComponentsBuilder.fromPath("rt/sensor-data").build().toUri())
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(data, SensorDataDTO.class)
+                .bodyValue(data)
         );
   }
 }
