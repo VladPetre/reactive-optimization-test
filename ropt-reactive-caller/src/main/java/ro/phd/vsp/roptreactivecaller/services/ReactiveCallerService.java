@@ -1,7 +1,6 @@
 package ro.phd.vsp.roptreactivecaller.services;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -64,16 +63,11 @@ public class ReactiveCallerService {
 
     try {
 
-      // v1
-//      Flux.range(0, step.getEntriesNumber())
-//          .flatMap(aL -> getReactCallerMono(step, sensors, aL))
-//          .blockLast();
-
       Flux.range(0, step.getEntriesNumber())
-          .parallel()
-          .runOn(Schedulers.boundedElastic())
-          .concatMap(aL -> getReactCallerMono(step, sensors, aL))
-          .ordered(Comparator.comparing(Integer::intValue))
+          //.parallel()
+          //.runOn(Schedulers.boundedElastic())
+          .flatMap(aL -> getReactCallerMono(step, sensors, aL), step.getThreadsNumber())
+//          .ordered(Comparator.comparing(Integer::intValue))
           .subscribeOn(Schedulers.boundedElastic())
           .blockLast();
 
