@@ -72,7 +72,7 @@ public class ReactiveCallerService {
       Flux.range(0, step.getEntriesNumber())
           .parallel()
           .runOn(Schedulers.boundedElastic())
-          .flatMap(aL -> getReactCallerMono(step, sensors, aL))
+          .concatMap(aL -> getReactCallerMono(step, sensors, aL))
           .ordered(Comparator.comparing(Integer::intValue))
           .subscribeOn(Schedulers.boundedElastic())
           .blockLast();
