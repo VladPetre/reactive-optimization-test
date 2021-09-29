@@ -2,6 +2,9 @@ package ro.phd.vsp.roptreactivecaller.controllers;
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -15,6 +18,9 @@ import ro.phd.vsp.roptreactivecaller.services.ReactiveCallerService;
 @RequiredArgsConstructor
 @RequestMapping("/test")
 public class TestController {
+
+  private static final Logger LOG = LoggerFactory.getLogger( TestController.class );
+  private static final String INSTANCE_KEY = "instance-id";
 
   private final ReactiveCallerService reactiveCallerService;
   private final ExecutionStatusRepository executionStatusRepository;
@@ -35,6 +41,13 @@ public class TestController {
 
     reactiveCallerService.executeReactiveRequests();
 
+  }
+
+  @GetMapping(path = "/log")
+  public void testLogs() {
+    MDC.put(INSTANCE_KEY, UNIQUE_INSTANCE_UUID.toString());
+    LOG.info("my log: {}", UUID.randomUUID());
+    MDC.remove(INSTANCE_KEY);
   }
 
 }
