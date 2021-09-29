@@ -2,6 +2,9 @@ package ro.phd.vsp.roptcaller.controllers;
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -16,8 +19,8 @@ import ro.phd.vsp.roptcaller.services.ClasicCallerService;
 @RequestMapping("/test")
 public class TestController {
 
-  private final ClasicCallerService clasicCallerService;
-  private final ExecutionStatusRepository executionStatusRepository;
+  private static final Logger LOG = LoggerFactory.getLogger( TestController.class );
+  private static final String INSTANCE_KEY = "instance-id";
 
   @Qualifier("uniqueInstanceUUID")
   private final UUID UNIQUE_INSTANCE_UUID;
@@ -30,10 +33,12 @@ public class TestController {
     return "{\"version\" : \"" + svcVersion + "\"}";
   }
 
-  @GetMapping(path = "/fjp", produces = MediaType.APPLICATION_JSON_VALUE)
-  public void testDeploy() {
-
-//TODO: add some implementation
+  @GetMapping(path = "/log")
+  public void testLogs() {
+    MDC.put(INSTANCE_KEY, UNIQUE_INSTANCE_UUID.toString());
+    LOG.info("my log: {}", UUID.randomUUID());
+    MDC.remove(INSTANCE_KEY);
   }
-
 }
+
+
