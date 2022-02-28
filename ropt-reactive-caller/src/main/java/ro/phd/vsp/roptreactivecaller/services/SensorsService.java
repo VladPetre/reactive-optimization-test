@@ -1,5 +1,6 @@
 package ro.phd.vsp.roptreactivecaller.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +14,14 @@ import ro.phd.vsp.roptreactivecaller.repositories.SensorsReactiveRepository;
 public class SensorsService {
 
   private final SensorsReactiveRepository sensorsRepository;
+  private final List<Sensor> sensorsCache = new ArrayList<>();
+
 
   public List<Sensor> getAllSensorsBlock() {
+    if(!sensorsCache.isEmpty()){
+      return sensorsCache;
+    }
+
     return sensorsRepository.findAll().collectList().block();
   }
 

@@ -36,7 +36,8 @@ public class SensorDataService {
           d.setValue(sensorDataDTO.getValue());
           d.setUpdatedOn(sensorDataDTO.getUpdatedOn());
           return d;
-        }).flatMap(sensorDataRepository::save)
+        })
+        .flatMap(sensorDataRepository::save)
         .map(this::toDto);
 
   }

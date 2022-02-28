@@ -5,18 +5,15 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ro.phd.vsp.roptreactivecaller.models.ExecutionStep;
 import ro.phd.vsp.roptreactivecaller.repositories.ExecutionStepsRepository;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class ExecutionRegistrationService {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(
-      ExecutionRegistrationService.class);
 
   private final ExecutionStepsRepository executionStepsRepository;
 
@@ -36,8 +33,8 @@ public class ExecutionRegistrationService {
         .collectList()
         .block();
 
-    if (activeSteps.size() != 1) {
-      LOGGER.error("REACT: None or Many steps were active!");
+    if (activeSteps != null && activeSteps.size() != 1) {
+      log.error("None or Many steps were active!");
       throw new IllegalArgumentException("None or Many steps were active!");
     }
 

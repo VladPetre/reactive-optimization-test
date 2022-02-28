@@ -1,45 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-  <property scope="context" name="log.fileExtension" value="log"/>
-  <property scope="context" name="log.directory" value="/logs"/>
-  <property scope="context" name="log.fileName" value="caller-elk"/>
-
-  <springProfile name="!local">
-    <property scope="context" name="logstash.docker.url" value="logstash-svc-ext:5000"/>
-  </springProfile>
-
-  <springProfile name="local">
-    <property scope="context" name="logstash.docker.url" value="localhost:5000"/>
-  </springProfile>
+  <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+  <springProperty scope="context" name="CONSOLE_PATTERN" source="application.console-pattern"/>
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <layout class="ch.qos.logback.classic.PatternLayout">
-      <pattern>%cyan([%d{yyyy-MM-dd HH:mm:ss.SSS}]) [${HOSTNAME}] [%thread] %yellow(%level) %highlight(%logger{36}@%method:%line) - %msg%n
+      <pattern>%cyan([%d{yyyy-MM-dd HH:mm:ss.SSS}]) [${HOSTNAME}] [%thread] %cyan([ST=R-RCV]) %cyan([SID=%X{SID:-DEF}]) %clr(%level) %highlight(%logger{36}@%method:%line) - %msg%n
       </pattern>
     </layout>
   </appender>
 
-  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>${log.directory}/${log.fileName}.%d{yyyy-MM-dd}.${log.fileExtension}
-      </fileNamePattern>
-    </rollingPolicy>
-    <encoder>
-      <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [${HOSTNAME}] [%thread] %level %logger{36}@%method:%line - %msg%n
-      </pattern>
-    </encoder>
-  </appender>
-
-  <appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-    <destination>${logstash.docker.url}</destination>
-    <!-- encoder is required -->
-    <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
-    <keepAliveDuration>5 minutes</keepAliveDuration>
-  </appender>
-
   <root level="INFO">
     <appender-ref ref="STDOUT"/>
-    <appender-ref ref="FILE"/>
-    <appender-ref ref="STASH"/>
   </root>
 </configuration>

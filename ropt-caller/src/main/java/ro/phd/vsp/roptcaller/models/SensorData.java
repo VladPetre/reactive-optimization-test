@@ -5,17 +5,13 @@ import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Table(name = "sensors_data")
 @NoArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
 public class SensorData {
 
   @Id

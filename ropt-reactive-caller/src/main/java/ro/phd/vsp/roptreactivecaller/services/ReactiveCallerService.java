@@ -1,15 +1,14 @@
 package ro.phd.vsp.roptreactivecaller.services;
 
+import static ro.phd.vsp.roptreactivecaller.utils.HttpUtils.buildRTHeaders;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -23,22 +22,20 @@ import ro.phd.vsp.roptreactivecaller.models.ExecutionStatus;
 import ro.phd.vsp.roptreactivecaller.models.ExecutionStep;
 import ro.phd.vsp.roptreactivecaller.models.Sensor;
 import ro.phd.vsp.roptreactivecaller.repositories.ExecutionStatusRepository;
-import ro.phd.vsp.roptreactivecaller.utils.HttpUtils;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class ReactiveCallerService {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(
-      ReactiveCallerService.class);
+  public static final Random RANDOM = new Random();
+  
   private final WebClient webClient;
   private final ExecutionRegistrationService registrationService;
   private final SensorsReactiveService sensorsReactiveService;
   private final SensorsService sensorsService;
   private final ExecutionStatusRepository executionStatusRepository;
-
-  @Qualifier("uniqueInstanceUUID")
-  private final UUID UNIQUE_INSTANCE_UUID;
+  private final UUID uniqueInstanceUuid;
 
   /**
    * Execute Requests to Receiver using Reactive WebClient The configuration is taken from
@@ -53,34 +50,28 @@ public class ReactiveCallerService {
     } catch (Exception e) {
       return;
     }
-    ExecutionStatus execStatus = new ExecutionStatus(null, UNIQUE_INSTANCE_UUID,
+    ExecutionStatus execStatus = new ExecutionStatus(null, uniqueInstanceUuid,
         InstanceTypes.CALLER_REACTIVE.toString(),
         LocalDateTime.now(), null, 0, step.getId());
 
     List<Sensor> sensors = sensorsService.getAllSensorsBlock();
 
-    LOGGER.info("Executing instance / step {}/{}", UNIQUE_INSTANCE_UUID, step);
+    log.info("Executing instance / step {}/{}", uniqueInstanceUuid, step);
 
     try {
-
       Flux.range(0, step.getEntriesNumber())
-          //.parallel()
-          //.runOn(Schedulers.boundedElastic())
           .flatMap(aL -> getReactCallerMono(step, sensors, aL), step.getThreadsNumber())
-//          .ordered(Comparator.comparing(Integer::intValue))
           .subscribeOn(Schedulers.boundedElastic())
           .blockLast();
 
       execStatus.setFinishedAt(LocalDateTime.now());
 
     } catch (Exception e) {
-      LOGGER.error("Error executing step {} - {}: {}", UNIQUE_INSTANCE_UUID, step, e);
+      log.error("Error executing step {} - {}: {}", uniqueInstanceUuid, step, e);
       execStatus.setError(1);
     }
 
-    System.out.println("finished");
     executionStatusRepository.save(execStatus).block();
-
   }
 
 
@@ -95,10 +86,10 @@ public class ReactiveCallerService {
           .filter(Objects::nonNull)
           .flatMap(sd -> updateSensorStatus(randomNr, sd));
     } catch (Exception e) {
-      LOGGER.error("Error calling receiver from {}, iteration {}, ex: {}",
-          UNIQUE_INSTANCE_UUID, i, e);
+      log.error("Error calling receiver from {}, iteration {}, ex: {}",
+          uniqueInstanceUuid, i, e);
     }
-    return Mono.just(null);
+    return Mono.just(1);
   }
 
 
@@ -130,18 +121,15 @@ public class ReactiveCallerService {
 
     return webClient.get()
         .uri("/rt/sensor-data/" + data.getGuid())
-        .headers(h -> HttpUtils.buildRTHeaders(UNIQUE_INSTANCE_UUID.toString()))
+        .headers(h -> buildRTHeaders(uniqueInstanceUuid.toString()))
         .retrieve()
         .bodyToMono(SensorDataDTO.class);
   }
 
   private Mono<SensorDataDTO> doPostRequest(SensorDataDTO data) {
-    HttpEntity<SensorDataDTO> entity = new HttpEntity<>(data,
-        HttpUtils.buildRTHeaders(UNIQUE_INSTANCE_UUID.toString()));
-
     return webClient.post()
         .uri("/rt/sensor-data")
-        .headers(h -> HttpUtils.buildRTHeaders(UNIQUE_INSTANCE_UUID.toString()))
+        .headers(h -> buildRTHeaders(uniqueInstanceUuid.toString()))
         .body(Mono.just(data), SensorDataDTO.class)
         .retrieve()
         .bodyToMono(SensorDataDTO.class);
@@ -151,14 +139,14 @@ public class ReactiveCallerService {
 
     return webClient.put()
         .uri("/rt/sensor-data/" + data.getGuid())
-        .headers(h -> HttpUtils.buildRTHeaders(UNIQUE_INSTANCE_UUID.toString()))
+        .headers(h -> buildRTHeaders(uniqueInstanceUuid.toString()))
         .body(Mono.just(data), SensorDataDTO.class)
         .retrieve()
         .bodyToMono(SensorDataDTO.class);
   }
 
   public int getRandom(int min, int max) {
-    return new Random().nextInt(max - min) + min;
+    return RANDOM.nextInt(max - min) + min;
   }
 
 }
