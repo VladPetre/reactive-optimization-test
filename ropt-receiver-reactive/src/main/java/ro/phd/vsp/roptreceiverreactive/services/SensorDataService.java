@@ -4,7 +4,6 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ro.phd.vsp.roptreceiverreactive.dtos.SensorDataDTO;
 import ro.phd.vsp.roptreceiverreactive.models.SensorData;
@@ -16,10 +15,6 @@ public class SensorDataService {
 
   private final SensorDataRepository sensorDataRepository;
 
-  public Flux<SensorDataDTO> getAll() {
-    return sensorDataRepository.findAll().map(this::toDto);
-  }
-
   public Mono<SensorDataDTO> getById(UUID guid) {
     return sensorDataRepository.findById(guid).map(this::toDto);
   }
@@ -29,7 +24,6 @@ public class SensorDataService {
   }
 
   public Mono<SensorDataDTO> updateWithGet(SensorDataDTO sensorDataDTO) {
-
     return sensorDataRepository.findById(sensorDataDTO.getGuid())
         .map(d -> {
           d.setBattery(sensorDataDTO.getBattery());
@@ -39,7 +33,6 @@ public class SensorDataService {
         })
         .flatMap(sensorDataRepository::save)
         .map(this::toDto);
-
   }
 
   private SensorDataDTO toDto(SensorData data) {

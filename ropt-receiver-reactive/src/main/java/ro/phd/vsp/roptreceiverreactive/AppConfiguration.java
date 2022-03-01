@@ -20,29 +20,15 @@ import ro.phd.vsp.roptreceiverreactive.handlers.SensorDataHandler;
 @ComponentScan(basePackages = {"ro.phd.vsp.roptreceiverreactive"})
 public class AppConfiguration {
 
-  /**
-   * Generate unique UUID to identify each instance. Used for execution step table as key of status
-   * table for receiver reactive
-   *
-   * @return UUID.randomUUID()
-   */
-  @Bean
-  @Qualifier("uniqueInstanceUUID")
-  public UUID uniqueInstanceUUID() {
-    return UUID.randomUUID();
-  }
-
   @Bean
   public RouterFunction<ServerResponse> sensorDataRoute(SensorDataHandler sensorDataHandler) {
     return RouterFunctions
-        .route(GET("/rt/sensor-data/{id}").and(accept(MediaType.APPLICATION_JSON))
-            , sensorDataHandler::getById)
-        .andRoute(POST("/rt/sensor-data").and(accept(MediaType.APPLICATION_JSON))
-            , sensorDataHandler::save)
-        .andRoute(PUT("/rt/sensor-data/{id}").and(accept(MediaType.APPLICATION_JSON))
-            , sensorDataHandler::updateWithGet)
-        .andRoute(GET("/rt/sensor-data").and(accept(MediaType.TEXT_EVENT_STREAM))
-            , sensorDataHandler::getAll);
+        .route(GET("/rt/sensor-data/{id}").and(accept(MediaType.APPLICATION_JSON)),
+            sensorDataHandler::getById)
+        .andRoute(POST("/rt/sensor-data").and(accept(MediaType.APPLICATION_JSON)),
+            sensorDataHandler::save)
+        .andRoute(PUT("/rt/sensor-data/{id}").and(accept(MediaType.APPLICATION_JSON)),
+            sensorDataHandler::updateWithGet);
   }
 
 

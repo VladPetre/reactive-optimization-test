@@ -5,7 +5,7 @@
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <layout class="ch.qos.logback.classic.PatternLayout">
-      <pattern>%cyan([%d{yyyy-MM-dd HH:mm:ss.SSS}]) [${HOSTNAME}] [%thread] %cyan([ST=RCV]) %cyan([SID=%X{SID:-DEF}]) %clr(%level) %highlight(%logger{36}@%method:%line) - %msg%n
+      <pattern>%magenta([%d{yyyy-MM-dd HH:mm:ss.SSS}]) %cyan([ST=R-CLR]) %cyan([SID=${HOSTNAME}]) [%thread] %clr(%level) %highlight(%logger{36}@%method:%line) - %msg%n
       </pattern>
     </layout>
   </appender>

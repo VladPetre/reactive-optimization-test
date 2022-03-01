@@ -1,5 +1,7 @@
 package ro.phd.vsp.roptreactivecaller.controllers;
 
+import static ro.phd.vsp.roptreactivecaller.utils.EnvUtils.getHostname;
+
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ro.phd.vsp.roptreactivecaller.services.ReactiveCallerService;
+import ro.phd.vsp.roptreactivecaller.utils.EnvUtils;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,9 +25,6 @@ public class TestController {
   private static final String INSTANCE_KEY = "instance-id";
 
   private final ReactiveCallerService reactiveCallerService;
-
-  @Qualifier("uniqueInstanceUUID")
-  private final UUID UNIQUE_INSTANCE_UUID;
 
   @Value("${ropt.version}")
   public String svcVersion;
@@ -43,7 +43,7 @@ public class TestController {
 
   @GetMapping(path = "/log")
   public void testLogs() {
-    MDC.put(INSTANCE_KEY, UNIQUE_INSTANCE_UUID.toString());
+    MDC.put(INSTANCE_KEY, getHostname());
     LOG.info("my log: {}", UUID.randomUUID());
     MDC.remove(INSTANCE_KEY);
   }

@@ -1,6 +1,7 @@
 package ro.phd.vsp.roptreactivecaller.utils;
 
 import java.util.Arrays;
+import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
@@ -13,7 +14,7 @@ public class HttpUtils {
    */
   public static HttpHeaders buildRTHeaders(String instanceId) {
     HttpHeaders headers = new HttpHeaders();
-    headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+    headers.setAccept(List.of(MediaType.APPLICATION_JSON));
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.set("instance_id", instanceId);
     return headers;

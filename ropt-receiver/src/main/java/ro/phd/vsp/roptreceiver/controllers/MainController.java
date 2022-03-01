@@ -2,6 +2,7 @@ package ro.phd.vsp.roptreceiver.controllers;
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,8 @@ import ro.phd.vsp.roptreceiver.services.SensorDataService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/rt/sensor-data", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/rt/sensor-data", produces = MediaType.APPLICATION_JSON_VALUE)
+@Slf4j
 public class MainController {
 
   private final SensorDataService sensorDataService;

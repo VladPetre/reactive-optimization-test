@@ -4,6 +4,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.cr
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -11,19 +12,15 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 import ro.phd.vsp.roptreceiverreactive.dtos.SensorDataDTO;
+import ro.phd.vsp.roptreceiverreactive.exceptions.DataNotFoundException;
 import ro.phd.vsp.roptreceiverreactive.services.SensorDataService;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class SensorDataHandler {
 
   private final SensorDataService sensorDataService;
-
-  public Mono<ServerResponse> getAll(ServerRequest request) {
-    return ServerResponse.ok()
-        .contentType(MediaType.TEXT_EVENT_STREAM)
-        .body(sensorDataService.getAll(), SensorDataDTO.class);
-  }
 
   public Mono<ServerResponse> getById(ServerRequest request) {
     return Mono.fromSupplier(() -> UUID.fromString(request.pathVariable("id")))
@@ -32,6 +29,10 @@ public class SensorDataHandler {
                 ServerResponse.ok()
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(sensorDataService.getById(id), SensorDataDTO.class)
+                    .onErrorResume(ex -> {
+                      log.error("Error retrieving data {} | {} ", id, ex);
+                      return Mono.error(DataNotFoundException::new);
+                    })
         );
   }
 
@@ -60,4 +61,5 @@ public class SensorDataHandler {
                 .bodyValue(data)
         );
   }
+
 }

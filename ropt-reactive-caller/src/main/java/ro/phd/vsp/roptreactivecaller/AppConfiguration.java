@@ -21,18 +21,6 @@ public class AppConfiguration {
   public String cRcvURI;
 
   /**
-   * Generate unique UUID to identify each instance. Used for execution step table as key of status
-   * table for caller
-   *
-   * @return UUID.randomUUID()
-   */
-  @Bean
-  @Qualifier("uniqueInstanceUUID")
-  public UUID uniqueInstanceUUID() {
-    return UUID.randomUUID();
-  }
-
-  /**
    * Return webclient object with baseUrl for reactive runType
    *
    * @return Webclient object

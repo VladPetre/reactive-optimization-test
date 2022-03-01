@@ -26,9 +26,9 @@ public class ExecutionRegistrationService {
 
     List<ExecutionStep> activeSteps = executionStepsRepository
         .findAll()
-        .filter(s -> s.getActive() && s.getMethod().toUpperCase().contains("REACT_")
-            && s.getLastActive().until(
-            LocalDateTime.now(), ChronoUnit.SECONDS) <= s.getSecondsOffset())
+        .filter(s -> s.getActive()
+            && s.getLastActive().until(LocalDateTime.now(), ChronoUnit.SECONDS)
+            <= s.getSecondsOffset())
         .collectList()
         .block();
 

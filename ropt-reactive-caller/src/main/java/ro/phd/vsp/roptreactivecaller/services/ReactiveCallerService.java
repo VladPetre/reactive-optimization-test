@@ -1,15 +1,14 @@
 package ro.phd.vsp.roptreactivecaller.services;
 
+import static ro.phd.vsp.roptreactivecaller.utils.EnvUtils.getHostname;
 import static ro.phd.vsp.roptreactivecaller.utils.HttpUtils.buildRTHeaders;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -32,16 +31,13 @@ public class ReactiveCallerService {
   private final WebClientFactory webClientFactory;
   private final ExecutionRegistrationService registrationService;
   private final SensorsService sensorsService;
-  private final UUID uniqueInstanceUuid;
 
   /**
    * Execute Requests to Receiver using Reactive WebClient The configuration is taken from
-   * ExecutionSteps Scheduled task with fixedRate = 5s and initialDelay 3s
+   * ExecutionSteps Scheduled task with fixedRate = 5s and initialDelay 2s
    */
-  @Scheduled(fixedRate = 5000, initialDelay = 3000)
+  @Scheduled(fixedRate = 5000, initialDelay = 2000)
   public void executeReactiveRequests() {
-
-    MDC.put("SID", uniqueInstanceUuid.toString());
 
     ExecutionStep step = null;
     try {
@@ -51,8 +47,6 @@ public class ReactiveCallerService {
     }
 
     executeStep(step);
-
-    MDC.clear();
   }
 
   private void executeStep(ExecutionStep step) {
@@ -69,6 +63,9 @@ public class ReactiveCallerService {
     } catch (Exception e) {
       log.error("Error executing step: {}: {}", step.getId(), e);
     }
+
+    log.info("Finished step | {}", step.getId());
+
   }
 
 
@@ -114,7 +111,7 @@ public class ReactiveCallerService {
   private Mono<SensorDataDTO> doGetRequest(WebClient client, SensorDataDTO data) {
 
     return client.get().uri("/rt/sensor-data/" + data.getGuid())
-        .headers(h -> buildRTHeaders(uniqueInstanceUuid.toString()))
+        .headers(h -> buildRTHeaders(getHostname()))
         .retrieve()
         .bodyToMono(SensorDataDTO.class);
   }
@@ -122,7 +119,7 @@ public class ReactiveCallerService {
   private Mono<SensorDataDTO> doPostRequest(WebClient client, SensorDataDTO data) {
 
     return client.post().uri("/rt/sensor-data")
-        .headers(h -> buildRTHeaders(uniqueInstanceUuid.toString()))
+        .headers(h -> buildRTHeaders(getHostname()))
         .body(Mono.just(data), SensorDataDTO.class)
         .retrieve()
         .bodyToMono(SensorDataDTO.class);
@@ -131,7 +128,7 @@ public class ReactiveCallerService {
   private Mono<SensorDataDTO> doPutRequest(WebClient client, SensorDataDTO data) {
 
     return client.put().uri("/rt/sensor-data/" + data.getGuid())
-        .headers(h -> buildRTHeaders(uniqueInstanceUuid.toString()))
+        .headers(h -> buildRTHeaders(getHostname()))
         .body(Mono.just(data), SensorDataDTO.class)
         .retrieve()
         .bodyToMono(SensorDataDTO.class);
