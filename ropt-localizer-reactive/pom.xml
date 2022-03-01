@@ -11,11 +11,11 @@
     <relativePath>../../reactive-optimization-test/pom.xml</relativePath>
   </parent>
 
-  <artifactId>ropt-receiver-reactive</artifactId>
+  <artifactId>ropt-localizer-reactive</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
-  <name>ropt-receiver-reactive</name>
-  <description>Demo project for Spring Boot</description>
+  <name>ropt-localizer-reactive</name>
+  <description>ropt-localizer-reactive</description>
 
   <properties>
     <java.version>11</java.version>
@@ -50,7 +50,7 @@
   </dependencies>
 
   <build>
-    <finalName>ropt-receiver-reactive</finalName>
+    <finalName>ropt-localizer-reactive</finalName>
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>

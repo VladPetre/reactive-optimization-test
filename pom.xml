@@ -24,6 +24,8 @@
     <module>ropt-reactive-caller</module>
     <module>ropt-receiver</module>
     <module>ropt-receiver-reactive</module>
+    <module>ropt-localizer</module>
+    <module>ropt-localizer-reactive</module>
   </modules>
 
   <properties>

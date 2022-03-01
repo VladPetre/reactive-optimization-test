@@ -3,7 +3,6 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <groupId>ro.phd.vsp</groupId>
     <artifactId>reactive-optimization-test</artifactId>
@@ -11,11 +10,11 @@
     <relativePath>../../reactive-optimization-test/pom.xml</relativePath>
   </parent>
 
-  <artifactId>ropt-receiver-reactive</artifactId>
+  <artifactId>ropt-localizer</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
-  <name>ropt-receiver-reactive</name>
-  <description>Demo project for Spring Boot</description>
+  <name>ropt-localizer</name>
+  <description>ropt-localizer</description>
 
   <properties>
     <java.version>11</java.version>
@@ -24,12 +23,11 @@
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-r2dbc</artifactId>
+      <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.r2dbc</groupId>
-      <artifactId>r2dbc-postgresql</artifactId>
-      <scope>runtime</scope>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
     <dependency>
@@ -37,20 +35,11 @@
       <artifactId>postgresql</artifactId>
       <version>42.3.3</version>
     </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-webflux</artifactId>
-    </dependency>
 
-    <dependency>
-      <groupId>io.projectreactor</groupId>
-      <artifactId>reactor-test</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <build>
-    <finalName>ropt-receiver-reactive</finalName>
+    <finalName>ropt-localizer</finalName>
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>
