@@ -11,11 +11,14 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 @EnableScheduling
-@ComponentScan(basePackages = {"ro.phd.vsp.roptcaller"})
+@ComponentScan(basePackages = {"ro.phd.vsp.roptreactivecaller"})
 public class AppConfiguration {
 
   @Value("${ROPT_RECEIVER_REACTIVE_URI}")
-  public String roptReactiveReceiverURI;
+  public String rRcvURI;
+
+  @Value("${ROPT_RECEIVER_CLASSIC_URI}")
+  public String cRcvURI;
 
   /**
    * Generate unique UUID to identify each instance. Used for execution step table as key of status
@@ -30,14 +33,28 @@ public class AppConfiguration {
   }
 
   /**
-   * Return reactive webclient object with baseUrl
+   * Return webclient object with baseUrl for reactive runType
    *
    * @return Webclient object
    */
   @Bean
-  public WebClient webClient() {
+  @Qualifier("reactiveClient")
+  public WebClient reactWebClient() {
     return WebClient.builder()
-        .baseUrl(roptReactiveReceiverURI)
+        .baseUrl(rRcvURI)
+        .build();
+  }
+
+  /**
+   * Return webclient object with baseUrl for classic runType
+   *
+   * @return Webclient object
+   */
+  @Bean
+  @Qualifier("classicClient")
+  public WebClient classicWebClient() {
+    return WebClient.builder()
+        .baseUrl(cRcvURI)
         .build();
   }
 }

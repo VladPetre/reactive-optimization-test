@@ -11,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ro.phd.vsp.roptreactivecaller.repositories.ExecutionStatusRepository;
 import ro.phd.vsp.roptreactivecaller.services.ReactiveCallerService;
 
 @RestController
@@ -19,11 +18,10 @@ import ro.phd.vsp.roptreactivecaller.services.ReactiveCallerService;
 @RequestMapping("/test")
 public class TestController {
 
-  private static final Logger LOG = LoggerFactory.getLogger( TestController.class );
+  private static final Logger LOG = LoggerFactory.getLogger(TestController.class);
   private static final String INSTANCE_KEY = "instance-id";
 
   private final ReactiveCallerService reactiveCallerService;
-  private final ExecutionStatusRepository executionStatusRepository;
 
   @Qualifier("uniqueInstanceUUID")
   private final UUID UNIQUE_INSTANCE_UUID;

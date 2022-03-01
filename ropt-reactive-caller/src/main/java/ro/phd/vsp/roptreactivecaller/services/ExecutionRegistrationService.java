@@ -3,7 +3,6 @@ package ro.phd.vsp.roptreactivecaller.services;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,7 +22,7 @@ public class ExecutionRegistrationService {
    *
    * @return Optional<ExecutionStep>
    */
-  public Optional<ExecutionStep> getReactStepToExecute() {
+  public ExecutionStep getReactStepToExecute() {
 
     List<ExecutionStep> activeSteps = executionStepsRepository
         .findAll()
@@ -33,11 +32,11 @@ public class ExecutionRegistrationService {
         .collectList()
         .block();
 
-    if (activeSteps != null && activeSteps.size() != 1) {
+    if (activeSteps == null || activeSteps.size() != 1) {
       log.error("None or Many steps were active!");
       throw new IllegalArgumentException("None or Many steps were active!");
     }
 
-    return Optional.of(activeSteps.get(0));
+    return activeSteps.get(0);
   }
 }

@@ -1,6 +1,6 @@
 package ro.phd.vsp.roptreactivecaller.enums;
 
-public enum ExecutionMethods {
+public enum ExecutionMethod {
   GET,
   SAVE,
   GET_SAVE,

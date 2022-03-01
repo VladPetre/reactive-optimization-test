@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -16,12 +17,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import ro.phd.vsp.roptreactivecaller.dtos.SensorDataDTO;
-import ro.phd.vsp.roptreactivecaller.enums.ExecutionMethods;
-import ro.phd.vsp.roptreactivecaller.enums.InstanceTypes;
-import ro.phd.vsp.roptreactivecaller.models.ExecutionStatus;
+import ro.phd.vsp.roptreactivecaller.enums.ExecutionMethod;
 import ro.phd.vsp.roptreactivecaller.models.ExecutionStep;
 import ro.phd.vsp.roptreactivecaller.models.Sensor;
-import ro.phd.vsp.roptreactivecaller.repositories.ExecutionStatusRepository;
+import ro.phd.vsp.roptreactivecaller.utils.WebClientFactory;
 
 @Component
 @RequiredArgsConstructor
@@ -29,72 +28,63 @@ import ro.phd.vsp.roptreactivecaller.repositories.ExecutionStatusRepository;
 public class ReactiveCallerService {
 
   public static final Random RANDOM = new Random();
-  
-  private final WebClient webClient;
+
+  private final WebClientFactory webClientFactory;
   private final ExecutionRegistrationService registrationService;
-  private final SensorsReactiveService sensorsReactiveService;
   private final SensorsService sensorsService;
-  private final ExecutionStatusRepository executionStatusRepository;
   private final UUID uniqueInstanceUuid;
 
   /**
    * Execute Requests to Receiver using Reactive WebClient The configuration is taken from
-   * ExecutionSteps Scheduled task with fixedRate = 5s and initialDelay 5s
+   * ExecutionSteps Scheduled task with fixedRate = 5s and initialDelay 3s
    */
   @Scheduled(fixedRate = 5000, initialDelay = 3000)
   public void executeReactiveRequests() {
 
-    ExecutionStep step;
+    MDC.put("SID", uniqueInstanceUuid.toString());
+
+    ExecutionStep step = null;
     try {
-      step = registrationService.getReactStepToExecute().get();
+      step = registrationService.getReactStepToExecute();
     } catch (Exception e) {
       return;
     }
-    ExecutionStatus execStatus = new ExecutionStatus(null, uniqueInstanceUuid,
-        InstanceTypes.CALLER_REACTIVE.toString(),
-        LocalDateTime.now(), null, 0, step.getId());
 
+    executeStep(step);
+
+    MDC.clear();
+  }
+
+  private void executeStep(ExecutionStep step) {
     List<Sensor> sensors = sensorsService.getAllSensorsBlock();
 
-    log.info("Executing instance / step {}/{}", uniqueInstanceUuid, step);
+    log.info("Executing step | {}", step.getId());
 
     try {
       Flux.range(0, step.getEntriesNumber())
           .flatMap(aL -> getReactCallerMono(step, sensors, aL), step.getThreadsNumber())
           .subscribeOn(Schedulers.boundedElastic())
-          .blockLast();
-
-      execStatus.setFinishedAt(LocalDateTime.now());
+          .subscribe();
 
     } catch (Exception e) {
-      log.error("Error executing step {} - {}: {}", uniqueInstanceUuid, step, e);
-      execStatus.setError(1);
+      log.error("Error executing step: {}: {}", step.getId(), e);
     }
-
-    executionStatusRepository.save(execStatus).block();
   }
 
 
-  private Mono<Integer> getReactCallerMono(ExecutionStep step, List<Sensor> sensors,
-      Integer i) {
+  private Mono<Integer> getReactCallerMono(ExecutionStep step, List<Sensor> sensors, Integer i) {
     try {
       int randomNr = getRandom(0, sensors.size());
       Sensor sensor = sensors.get(randomNr);
-      return doRequest(ExecutionMethods.valueOf(step.getMethod()),
+      ExecutionMethod method = ExecutionMethod.valueOf(step.getMethod());
+      return doRequest(webClientFactory.getclient(method),
+          method,
           new SensorDataDTO(sensor.getGuid(), (double) randomNr, (double) randomNr / 10,
-              LocalDateTime.now()))
-          .filter(Objects::nonNull)
-          .flatMap(sd -> updateSensorStatus(randomNr, sd));
+              LocalDateTime.now())).filter(Objects::nonNull).flatMap(sd -> Mono.just(1));
     } catch (Exception e) {
-      log.error("Error calling receiver from {}, iteration {}, ex: {}",
-          uniqueInstanceUuid, i, e);
+      log.error("Error calling receiver, iteration {}, ex: {}", i, e);
     }
     return Mono.just(1);
-  }
-
-
-  public Mono<Integer> updateSensorStatus(int randomNr, SensorDataDTO sd) {
-    return sensorsReactiveService.updateSensorStatus(randomNr, sd.getGuid());
   }
 
   /**
@@ -104,48 +94,50 @@ public class ReactiveCallerService {
    * @param data   senserDataDTO details
    * @return SensorDataDTO
    */
-  private Mono<SensorDataDTO> doRequest(ExecutionMethods method, SensorDataDTO data) {
+  private Mono<SensorDataDTO> doRequest(WebClient client, ExecutionMethod method,
+      SensorDataDTO data) {
     switch (method) {
+      case GET:
       case REACT_GET:
-        return doGetRequest(data);
+        return doGetRequest(client, data);
+      case SAVE:
       case REACT_SAVE:
-        return doPostRequest(data);
+        return doPostRequest(client, data);
+      case GET_SAVE:
       case REACT_GET_SAVE:
-        return doPutRequest(data);
+        return doPutRequest(client, data);
       default:
         throw new IllegalArgumentException("Invalid option for method:" + method);
     }
   }
 
-  private Mono<SensorDataDTO> doGetRequest(SensorDataDTO data) {
+  private Mono<SensorDataDTO> doGetRequest(WebClient client, SensorDataDTO data) {
 
-    return webClient.get()
-        .uri("/rt/sensor-data/" + data.getGuid())
+    return client.get().uri("/rt/sensor-data/" + data.getGuid())
         .headers(h -> buildRTHeaders(uniqueInstanceUuid.toString()))
         .retrieve()
         .bodyToMono(SensorDataDTO.class);
   }
 
-  private Mono<SensorDataDTO> doPostRequest(SensorDataDTO data) {
-    return webClient.post()
-        .uri("/rt/sensor-data")
-        .headers(h -> buildRTHeaders(uniqueInstanceUuid.toString()))
-        .body(Mono.just(data), SensorDataDTO.class)
-        .retrieve()
-        .bodyToMono(SensorDataDTO.class);
-  }
+  private Mono<SensorDataDTO> doPostRequest(WebClient client, SensorDataDTO data) {
 
-  private Mono<SensorDataDTO> doPutRequest(SensorDataDTO data) {
-
-    return webClient.put()
-        .uri("/rt/sensor-data/" + data.getGuid())
+    return client.post().uri("/rt/sensor-data")
         .headers(h -> buildRTHeaders(uniqueInstanceUuid.toString()))
         .body(Mono.just(data), SensorDataDTO.class)
         .retrieve()
         .bodyToMono(SensorDataDTO.class);
   }
 
-  public int getRandom(int min, int max) {
+  private Mono<SensorDataDTO> doPutRequest(WebClient client, SensorDataDTO data) {
+
+    return client.put().uri("/rt/sensor-data/" + data.getGuid())
+        .headers(h -> buildRTHeaders(uniqueInstanceUuid.toString()))
+        .body(Mono.just(data), SensorDataDTO.class)
+        .retrieve()
+        .bodyToMono(SensorDataDTO.class);
+  }
+
+  private int getRandom(int min, int max) {
     return RANDOM.nextInt(max - min) + min;
   }
 
