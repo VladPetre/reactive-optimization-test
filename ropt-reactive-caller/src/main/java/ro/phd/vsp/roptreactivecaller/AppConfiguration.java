@@ -1,8 +1,10 @@
 package ro.phd.vsp.roptreactivecaller;
 
-import java.util.UUID;
+import io.micrometer.core.aop.TimedAspect;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -44,5 +46,17 @@ public class AppConfiguration {
     return WebClient.builder()
         .baseUrl(cRcvURI)
         .build();
+  }
+
+  // METRICS
+  @Bean
+  MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
+//    return registry -> registry.config().commonTags("application", "my app");
+    return registry -> registry.config();
+  }
+
+  @Bean
+  TimedAspect timedAspect(MeterRegistry registry) {
+    return new TimedAspect(registry);
   }
 }

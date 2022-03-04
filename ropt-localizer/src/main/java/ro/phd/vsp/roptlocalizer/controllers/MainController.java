@@ -1,5 +1,6 @@
 package ro.phd.vsp.roptlocalizer.controllers;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,6 @@ import ro.phd.vsp.roptlocalizer.service.SensorsService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/rt/sensors", produces = MediaType.APPLICATION_JSON_VALUE)
-@Slf4j
 public class MainController {
 
   private final SensorsService sensorsService;

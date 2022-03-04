@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ropt-receiver-reactive
+  name: ropt-r-receiver
   namespace: ropt
 spec:
   replicas: 1
@@ -9,12 +9,12 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: ropt-receiver-reactive
+      app: ropt-r-receiver
   template:
     metadata:
-      name: ropt-receiver-reactive-pod
+      name: ropt-r-receiver-pod
       labels:
-        app: ropt-receiver-reactive
+        app: ropt-r-receiver
         team: vsp
       annotations:
         prometheus.io/scrape: "true"
@@ -22,8 +22,8 @@ spec:
         prometheus.io/path: "/actuator/prometheus"
     spec:
       containers:
-        - name: ropt-receiver-reactive-container
-          image: vladstep/ropt-receiver-reactive:{{ropt-image-tag}}
+        - name: ropt-r-receiver-container
+          image: vladstep/ropt-receiver-reactive:latest
           imagePullPolicy: Always
           ports:
             - name: receiver-r-port
@@ -35,35 +35,3 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "1000m"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: ropt-receiver-reactive-cip-svc
-  namespace: ropt
-  labels:
-    app: ropt-receiver-reactive-cip
-    vsp.monitor: receiver-react-service
-spec:
-  selector:
-    app: ropt-receiver-reactive
-  type: ClusterIP
-  ports:
-    - name: receiver-r-port
-      port: 8080
-      targetPort: 8080
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: ropt-receiver-reactive-svc
-  namespace: ropt
-  labels:
-    app: ropt-receiver-reactive
-spec:
-  selector:
-    app: ropt-receiver-reactive
-  type: LoadBalancer
-  ports:
-    - port: 8084
-      targetPort: 8080

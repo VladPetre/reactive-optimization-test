@@ -1,5 +1,0 @@
-#prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues: false
-#prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues: false
-
-prometheus-node-exporter:
-    hostRootFsMount: false

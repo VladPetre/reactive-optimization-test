@@ -5,8 +5,11 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import static org.springframework.web.reactive.function.server.RequestPredicates.PUT;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 
+import io.micrometer.core.aop.TimedAspect;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +19,7 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import ro.phd.vsp.roptreceiverreactive.handlers.SensorDataHandler;
+import ro.phd.vsp.roptreceiverreactive.handlers.TestingHandler;
 
 @Configuration
 @ComponentScan(basePackages = {"ro.phd.vsp.roptreceiverreactive"})
@@ -35,7 +39,10 @@ public class AppConfiguration {
             sensorDataHandler::updateWithGet);
   }
 
-
+  @Bean
+  public RouterFunction<ServerResponse> testingDataRoute(TestingHandler testingHandler) {
+    return RouterFunctions.route(GET("/t/logs"), testingHandler::generateLogs);
+  }
 
   /**
    * Return webclient object with baseUrl for reactive runType
@@ -48,6 +55,18 @@ public class AppConfiguration {
     return WebClient.builder()
         .baseUrl(rLclURI)
         .build();
+  }
+
+  // METRICS
+  @Bean
+  MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
+//    return registry -> registry.config().commonTags("application", "my app");
+    return registry -> registry.config();
+  }
+
+  @Bean
+  TimedAspect timedAspect(MeterRegistry registry) {
+    return new TimedAspect(registry);
   }
 
 }

@@ -24,6 +24,9 @@ public class SensorDataService {
         .headers(h -> buildRTHeaders(guid.toString()))
         .retrieve()
         .bodyToMono(String.class)
+
+        // poate in loc de filter pot sa pun un map la boolean sau ceva si sa arunc exceptie si sa folosesc on error
+
         .filter(s -> s != null && s.trim().isEmpty())
         .flatMap(s -> sensorDataRepository.findById(guid).map(this::toDto));
   }

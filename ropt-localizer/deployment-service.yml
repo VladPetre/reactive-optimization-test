@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ropt-r-caller
+  name: ropt-localizer
   namespace: ropt
 spec:
-  replicas: 3
+  replicas: 1
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: ropt-r-caller
+      app: ropt-localizer
   template:
     metadata:
-      name: ropt-r-caller-pod
+      name: ropt-localizer-pod
       labels:
-        app: ropt-r-caller
+        app: ropt-localizer
         team: vsp
       annotations:
         prometheus.io/scrape: "true"
@@ -22,11 +22,11 @@ spec:
         prometheus.io/path: "/actuator/prometheus"
     spec:
       containers:
-        - name: ropt-r-caller-container
-          image: vladstep/ropt-r-caller:latest
+        - name: ropt-localizer-container
+          image: vladstep/ropt-localizer:latest
           imagePullPolicy: Always
           ports:
-            - name: caller-r-port
+            - name: localizer-port
               containerPort: 8080
           resources:
             requests:
