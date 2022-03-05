@@ -7,7 +7,7 @@
     <groupId>ro.phd.vsp</groupId>
     <artifactId>reactive-optimization-test</artifactId>
     <version>0.1.0</version>
-    <relativePath>../../reactive-optimization-test/pom.xml
+    <relativePath>../pom.xml
     </relativePath> <!-- lookup parent from repository -->
   </parent>
 
