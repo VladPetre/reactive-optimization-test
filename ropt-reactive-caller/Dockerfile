@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11:jre-11.0.10_9-alpine
+FROM openjdk:11-jre-slim-bullseye
 
 COPY target/ropt-reactive-caller.jar /ropt-reactive-caller.jar
 
