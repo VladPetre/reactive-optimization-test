@@ -14,7 +14,7 @@
   <groupId>ro.phd.vsp</groupId>
   <artifactId>reactive-optimization-test</artifactId>
   <packaging>pom</packaging>
-  <version>0.1</version>
+  <version>0.1.0</version>
 
   <name>reactive-optimization-test</name>
   <description>Demo project for Spring Boot</description>

@@ -6,12 +6,11 @@
   <parent>
     <groupId>ro.phd.vsp</groupId>
     <artifactId>reactive-optimization-test</artifactId>
-    <version>0.1</version>
+    <version>0.1.0</version>
     <relativePath>../../reactive-optimization-test/pom.xml</relativePath>
   </parent>
 
   <artifactId>ropt-localizer</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
 
   <name>ropt-localizer</name>
   <description>ropt-localizer</description>

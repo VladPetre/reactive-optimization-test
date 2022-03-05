@@ -7,12 +7,11 @@
   <parent>
     <groupId>ro.phd.vsp</groupId>
     <artifactId>reactive-optimization-test</artifactId>
-    <version>0.1</version>
+    <version>0.1.0</version>
     <relativePath>../../reactive-optimization-test/pom.xml</relativePath>
   </parent>
 
   <artifactId>ropt-receiver-reactive</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
 
   <name>ropt-receiver-reactive</name>
   <description>Demo project for Spring Boot</description>

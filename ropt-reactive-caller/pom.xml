@@ -6,14 +6,12 @@
   <parent>
     <groupId>ro.phd.vsp</groupId>
     <artifactId>reactive-optimization-test</artifactId>
-    <version>0.1</version>
+    <version>0.1.0</version>
     <relativePath>../../reactive-optimization-test/pom.xml
     </relativePath> <!-- lookup parent from repository -->
   </parent>
 
-  <groupId>ro.phd.vsp</groupId>
   <artifactId>ropt-reactive-caller</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
   <name>ropt-reactive-caller</name>
   <description>Demo project for Spring Boot</description>
 
