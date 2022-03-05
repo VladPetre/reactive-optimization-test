@@ -5,6 +5,7 @@ pipeline {
         registry = "vladstep/${PARAM_MODULE}"
         imageTag = "latest"
         dockerImage = ''
+        registryCredential = 'dockerhub_id'
     }
 
     parameters {
@@ -32,7 +33,7 @@ pipeline {
             steps {
                 dir("${params.PARAM_MODULE}") {
                     script {
-                        dockerImage = docker.build registry + ":" + imageTag
+                            dockerImage = docker.build registry + ":" + imageTag
                     }
                 }
             }
