@@ -1,5 +1,5 @@
-FROM adoptopenjdk/openjdk11:jre-11.0.10_9-alpine
+FROM openjdk:11-jre-slim-bullseye
 
-COPY reactive-optimization-test/ropt-receiver-reactive/target/ropt-receiver-reactive.jar /ropt-receiver-reactive.jar
+COPY target/ropt-receiver-reactive.jar /ropt-receiver-reactive.jar
 
 CMD ["java", "-jar", "/ropt-receiver-reactive.jar"]
