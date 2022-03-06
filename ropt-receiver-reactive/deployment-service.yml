@@ -15,7 +15,6 @@ spec:
       name: ropt-r-receiver-pod
       labels:
         app: ropt-r-receiver
-        team: vsp
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"

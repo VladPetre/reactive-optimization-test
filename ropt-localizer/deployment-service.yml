@@ -15,7 +15,6 @@ spec:
       name: ropt-localizer-pod
       labels:
         app: ropt-localizer
-        team: vsp
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"

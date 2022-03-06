@@ -63,7 +63,7 @@ pipeline {
                     sh '''
                       kubectl apply -f deployment-service.yml
                       deployName="$(grep 'name:' deployment-service.yml | head -1 | awk -F: '{print $2}' | tr -d " ")"
-                      kubectl -n ropt rollout status deployment $deployName --watch --timeout=5m
+//                       kubectl -n ropt rollout status deployment $deployName --watch --timeout=5m
                     '''
                     }
                 }
