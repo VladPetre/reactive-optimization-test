@@ -2,11 +2,10 @@ pipeline {
 
     agent any
     environment {
-//         registry = "vladstep/${PARAM_MODULE}"
-        registry = "charlie.lan:5000/ropt/${PARAM_MODULE}"
+        registry = "ropt/${PARAM_MODULE}"
+        registryRoot = "http://charlie.lan:5000"
         imageTag = "latest"
         dockerImage = ''
-        registryCredential = 'dockerhub_id'
     }
 
     parameters {
@@ -34,10 +33,7 @@ pipeline {
             steps {
                 dir("${params.PARAM_MODULE}") {
                     script {
-//                         docker.withRegistry('', registryCredential) {
-                        docker.withRegistry('', '') {
-                            dockerImage = docker.build registry + ":" + imageTag
-                        }
+                        dockerImage = docker.build registry + ":" + imageTag
                     }
                 }
             }
@@ -46,8 +42,7 @@ pipeline {
         stage('Docker push') {
             steps {
                 script {
-//                     docker.withRegistry('', registryCredential) {
-                    docker.withRegistry('', '') {
+                    docker.withRegistry(registryRoot) {
                         dockerImage.push()
                     }
                 }
@@ -67,6 +62,8 @@ pipeline {
                     dir("${params.PARAM_MODULE}") {
                     sh '''
                       kubectl apply -f deployment-service.yml
+                      deployName="$(grep 'name:' deployment-service.yml | head -1 | awk -F: '{print $2}' | tr -d " ")"
+                      kubectl -n ropt rollout status deployment $deployName --watch --timeout=5m
                     '''
                     }
                 }
