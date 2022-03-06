@@ -2,79 +2,79 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ropt-r-caller-svc
+  name: r-caller-svc
   namespace: ropt
   labels:
-    app: ropt-r-caller-svc
+    app: r-caller-svc
 spec:
   selector:
-    app: ropt-r-caller
+    app: r-caller
   type: ClusterIP
   ports:
-    - name: ropt-r-caller-port
+    - name: r-caller-p
       port: 8080
       targetPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ropt-receiver-svc
+  name: receiver-svc
   namespace: ropt
   labels:
-    app: ropt-receiver-svc
+    app: receiver-svc
 spec:
   selector:
-    app: ropt-receiver
+    app: receiver
   type: ClusterIP
   ports:
-    - name: ropt-receiver-port
+    - name: receiver-p
       port: 8080
       targetPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ropt-r-receiver-svc
+  name: r-receiver-svc
   namespace: ropt
   labels:
-    app: ropt-r-receiver-svc
+    app: r-receiver-svc
 spec:
   selector:
-    app: ropt-r-receiver
+    app: r-receiver
   type: ClusterIP
   ports:
-    - name: ropt-receiver-r-port
+    - name: receiver-r-p
       port: 8080
       targetPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ropt-localizer-svc
+  name: localizer-svc
   namespace: ropt
   labels:
-    app: ropt-localizer-svc
+    app: localizer-svc
 spec:
   selector:
-    app: ropt-localizer
+    app: localizer
   type: ClusterIP
   ports:
-    - name: ropt-localizer-port
+    - name: localizer-p
       port: 8080
       targetPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ropt-r-localizer-svc
+  name: r-localizer-svc
   namespace: ropt
   labels:
-    app: ropt-r-localizer
+    app: r-localizer
 spec:
   selector:
-    app: ropt-r-localizer
+    app: r-localizer
   type: ClusterIP
   ports:
-    - name: ropt-r-localizer-port
+    - name: r-localizer-p
       port: 8080
       targetPort: 8080
