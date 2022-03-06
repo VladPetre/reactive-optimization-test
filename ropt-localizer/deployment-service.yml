@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ropt-localizer
+  name: localizer
   namespace: ropt
 spec:
   replicas: 1
@@ -9,23 +9,23 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: ropt-localizer
+      app: localizer
   template:
     metadata:
-      name: ropt-localizer-pod
+      name: localizer-pod
       labels:
-        app: ropt-localizer
+        app: localizer
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
         prometheus.io/path: "/actuator/prometheus"
     spec:
       containers:
-        - name: ropt-localizer-container
+        - name: localizer-container
           image: vladstep/ropt-localizer:latest
           imagePullPolicy: Always
           ports:
-            - name: localizer-port
+            - name: localizer-p
               containerPort: 8080
           resources:
             requests:

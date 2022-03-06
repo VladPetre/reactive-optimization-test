@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ropt-receiver
+  name: receiver
   namespace: ropt
 spec:
   replicas: 1
@@ -9,23 +9,23 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: ropt-receiver
+      app: receiver
   template:
     metadata:
-      name: ropt-receiver-pod
+      name: receiver-pod
       labels:
-        app: ropt-receiver
+        app: receiver
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
         prometheus.io/path: "/actuator/prometheus"
     spec:
       containers:
-        - name: ropt-receiver-container
+        - name: receiver-container
           image: vladstep/ropt-receiver:latest
           imagePullPolicy: Always
           ports:
-            - name: receiver-port
+            - name: receiver-p
               containerPort: 8080
           resources:
             requests:
