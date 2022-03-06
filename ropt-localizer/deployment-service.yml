@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: localizer-container
-          image: vladstep/ropt-localizer:latest
+          image: charlie.lan/ropt/ropt-localizer:latest
           imagePullPolicy: Always
           ports:
             - name: localizer-p

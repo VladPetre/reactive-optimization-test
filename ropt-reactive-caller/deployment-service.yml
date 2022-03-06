@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: r-caller-container
-          image: vladstep/ropt-r-caller:latest
+          image: charlie.lan/ropt/ropt-r-caller:latest
           imagePullPolicy: Always
           ports:
             - name: caller-r-p
