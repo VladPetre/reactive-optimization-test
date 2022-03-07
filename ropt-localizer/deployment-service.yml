@@ -46,7 +46,7 @@ spec:
                   name: pg-db-creds
                   key: ps
             - name: POSTGRES_SVC
-                valueFrom:
-                  configMapKeyRef:
-                    name: app-config
-                    key: pg-db-svc-ext
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: pg-db-svc-ext
