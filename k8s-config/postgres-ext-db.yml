@@ -10,7 +10,7 @@ spec:
       port: 5432
       targetPort: 5432
       nodePort: 0
-selector:
+  selector:
 ---
 apiVersion: v1
 kind: Endpoints
