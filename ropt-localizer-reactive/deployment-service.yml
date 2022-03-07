@@ -34,3 +34,19 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "1000m"
+          env:
+            - name: PG_UN
+              valueFrom:
+                secretKeyRef:
+                  name: pg-db-creds
+                  key: un
+            - name: PG_PS
+              valueFrom:
+                secretKeyRef:
+                  name: pg-db-creds
+                  key: ps
+            - name: POSTGRES_SVC
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: pg-service

@@ -49,4 +49,4 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: app-config
-                  key: pg-db-svc-ext
+                  key: pg-service
