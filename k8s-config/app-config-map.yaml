@@ -4,4 +4,9 @@ metadata:
   name: app-config
   namespace: ropt
 data:
-  pg-service: pg-db-svc-ext
+  pg-service: "pg-db-svc-ext"
+  pg-max-pool-size: "10"
+  receiver-r-uri: "http://receiver.ropt.sierra.lan"
+  receiver-uri: "http://r-receiver.ropt.sierra.lan"
+  localizer-r-uri: "http://r-localizer-svc.ropt.svc.cluster.local:8080"
+  localizer-uri: "http://localizer-svc.ropt.svc.cluster.local:8080"
