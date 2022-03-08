@@ -15,7 +15,7 @@ import ro.phd.vsp.roptlocalizerreactive.utils.EnvUtils;
 public class TestingHandler {
 
   public Mono<ServerResponse> generateLogs(ServerRequest request) {
-    return Mono.empty()
+    return Mono.just(1)
         .flatMap(
             id ->
             {
@@ -24,7 +24,7 @@ public class TestingHandler {
               log.error("ERROR log from {}", EnvUtils.getHostname());
               return ServerResponse.ok()
                   .contentType(MediaType.APPLICATION_JSON)
-                  .body("yay! It worked!", String.class);
+                  .bodyValue("yay! It worked!");
             }
         );
   }

@@ -4,6 +4,7 @@ pipeline {
     environment {
         registry = "ropt/${PARAM_MODULE}"
         registryRoot = "http://charlie.lan:5000"
+        registryClr = "charlie.lan:5000/ropt/${PARAM_MODULE}"
         imageTag = "latest"
         dockerImage = ''
     }
@@ -73,7 +74,7 @@ pipeline {
 
     post {
         always {
-            sh "docker rmi $registry:$imageTag"
+            sh "docker rmi $registryClr:$imageTag"
             cleanWs()
         }
     }

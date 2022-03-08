@@ -1,5 +1,7 @@
 package ro.phd.vsp.roptreceiverreactive.handlers;
 
+import static org.springframework.web.reactive.function.server.ServerResponse.ok;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -15,16 +17,15 @@ import ro.phd.vsp.roptreceiverreactive.utils.EnvUtils;
 public class TestingHandler {
 
   public Mono<ServerResponse> generateLogs(ServerRequest request) {
-    return Mono.empty()
+    return Mono.just(1)
         .flatMap(
             id ->
             {
               log.info("INFO log from {}", EnvUtils.getHostname());
               log.warn("WARN log from {}", EnvUtils.getHostname());
               log.error("ERROR log from {}", EnvUtils.getHostname());
-              return ServerResponse.ok()
-                  .contentType(MediaType.APPLICATION_JSON)
-                  .body("yay! It worked!", String.class);
+              return ok().contentType(MediaType.APPLICATION_JSON)
+                  .bodyValue("yay! It worked!");
             }
         );
   }
