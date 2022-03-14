@@ -62,8 +62,10 @@ pipeline {
                 withKubeConfig([credentialsId: 'k3s-sierra-config', serverUrl: 'https://192.168.7.153:6443']) {
                     dir("${params.PARAM_MODULE}") {
                     sh '''
-                      kubectl apply -f deployment-service.yml
                       deployName="$(grep 'name:' deployment-service.yml | head -1 | awk -F: '{print $2}' | tr -d " ")"
+                      kubectl -n ropt delete deployment $deployName
+                      sleep 5
+                      kubectl apply -f deployment-service.yml
                       kubectl -n ropt rollout status deployment $deployName --watch --timeout=5m
                     '''
                     }
