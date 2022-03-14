@@ -1,7 +1,5 @@
 package ro.phd.vsp.roptreactivecaller;
 
-import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
-
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,10 +10,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.server.RouterFunction;
-import org.springframework.web.reactive.function.server.RouterFunctions;
-import org.springframework.web.reactive.function.server.ServerResponse;
-import ro.phd.vsp.roptreactivecaller.handlers.AvailabilityHandler;
 
 @Configuration
 @EnableScheduling
@@ -28,11 +22,11 @@ public class AppConfiguration {
   @Value("${ROPT_RECEIVER_CLASSIC_URI}")
   public String cRcvURI;
 
-  @Bean
-  public RouterFunction<ServerResponse> availabilityRoute(AvailabilityHandler availabilityHandler) {
-    return RouterFunctions.route(GET("/availability/ready"), availabilityHandler::isReady)
-        .andRoute(GET("/availability/ready"), availabilityHandler::isLive);
-  }
+//  @Bean
+//  public RouterFunction<ServerResponse> availabilityRoute(AvailabilityHandler availabilityHandler) {
+//    return RouterFunctions.route(GET("/availability/ready"), availabilityHandler::isReady)
+//        .andRoute(GET("/availability/ready"), availabilityHandler::isLive);
+//  }
 
   /**
    * Return webclient object with baseUrl for reactive runType

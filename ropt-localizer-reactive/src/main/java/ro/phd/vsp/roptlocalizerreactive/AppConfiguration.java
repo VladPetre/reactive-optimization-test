@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import ro.phd.vsp.roptlocalizerreactive.handlers.AvailabilityHandler;
 import ro.phd.vsp.roptlocalizerreactive.handlers.SensorsHandler;
 import ro.phd.vsp.roptlocalizerreactive.handlers.TestingHandler;
 
@@ -27,11 +26,11 @@ public class AppConfiguration {
         sensorsHandler::getLocalizationById);
   }
 
-  @Bean
-  public RouterFunction<ServerResponse> availabilityRoute(AvailabilityHandler availabilityHandler) {
-    return RouterFunctions.route(GET("/availability/ready"), availabilityHandler::isReady)
-        .andRoute(GET("/availability/ready"), availabilityHandler::isLive);
-  }
+//  @Bean
+//  public RouterFunction<ServerResponse> availabilityRoute(AvailabilityHandler availabilityHandler) {
+//    return RouterFunctions.route(GET("/availability/ready"), availabilityHandler::isReady)
+//        .andRoute(GET("/availability/ready"), availabilityHandler::isLive);
+//  }
 
   @Bean
   public RouterFunction<ServerResponse> testingDataRoute(TestingHandler testingHandler) {
