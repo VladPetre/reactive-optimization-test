@@ -17,7 +17,7 @@ public class SensorsService {
   @Timed("lcl.sensors.getLocationById")
   public String getLocationById(UUID id) {
     meterRegistry.counter("lcl.counter").increment();
-    return sensorsRepository.getOne(id).getLocation();
+    return sensorsRepository.getById(id).getLocation();
   }
 
 }

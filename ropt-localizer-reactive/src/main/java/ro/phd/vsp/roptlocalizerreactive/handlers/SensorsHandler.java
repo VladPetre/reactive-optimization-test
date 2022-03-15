@@ -16,13 +16,13 @@ public class SensorsHandler {
   private final SensorsReactiveService sensorsReactiveService;
 
   public Mono<ServerResponse> getLocalizationById(ServerRequest request) {
+
     return Mono.fromSupplier(() -> UUID.fromString(request.pathVariable("id")))
-        .flatMap(
-            id ->
-                ServerResponse.ok()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(sensorsReactiveService.getLocalizationById(id), String.class)
-        );
+        .map(sensorsReactiveService::getLocalizationById)
+        .onErrorReturn(Mono.error(() -> new RuntimeException("Failed to get sensor with id " + request.pathVariable("id"))))
+        .flatMap(s -> ServerResponse.ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(s, String.class));
   }
 
 }

@@ -17,7 +17,7 @@ import ro.phd.vsp.roptlocalizer.utils.EnvUtils;
 public class TestController {
 
   @GetMapping(path = "/logs")
-  public ResponseEntity<String> getById() {
+  public ResponseEntity<String> genLogs() {
     log.info("INFO log from {}", EnvUtils.getHostname());
     log.warn("WARN log from {}", EnvUtils.getHostname());
     log.error("ERROR log from {}", EnvUtils.getHostname());

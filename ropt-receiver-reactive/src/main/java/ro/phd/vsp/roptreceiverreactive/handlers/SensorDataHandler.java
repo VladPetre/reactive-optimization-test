@@ -12,7 +12,6 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 import ro.phd.vsp.roptreceiverreactive.dtos.SensorDataDTO;
-import ro.phd.vsp.roptreceiverreactive.exceptions.DataNotFoundException;
 import ro.phd.vsp.roptreceiverreactive.services.SensorDataService;
 
 @Component
@@ -24,16 +23,26 @@ public class SensorDataHandler {
 
   public Mono<ServerResponse> getById(ServerRequest request) {
     return Mono.fromSupplier(() -> UUID.fromString(request.pathVariable("id")))
+        .map(sensorDataService::getById)
+        .onErrorReturn(Mono.error(() -> new RuntimeException("Failed to get sensor with id " + request.pathVariable("id"))))
         .flatMap(
-            id ->
+            s ->
                 ServerResponse.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(sensorDataService.getById(id), SensorDataDTO.class)
-                    .onErrorResume(ex -> {
-                      log.error("Error retrieving data {} | {} ", id, ex);
-                      return Mono.error(DataNotFoundException::new);
-                    })
+                    .body(s, SensorDataDTO.class)
         );
+
+//    return Mono.fromSupplier(() -> UUID.fromString(request.pathVariable("id")))
+//        .flatMap(
+//            id ->
+//                ServerResponse.ok()
+//                    .contentType(MediaType.APPLICATION_JSON)
+//                    .body(sensorDataService.getById(id), SensorDataDTO.class)
+//                    .onErrorResume(ex -> {
+//                      log.error("Error retrieving data {} | {} ", id, ex);
+//                      return Mono.error(DataNotFoundException::new);
+//                    })
+//        );
   }
 
   public Mono<ServerResponse> save(ServerRequest request) {
