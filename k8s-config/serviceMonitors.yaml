@@ -1,0 +1,33 @@
+### caller
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ropt-services
+  namespace: ropt
+  labels:
+    team: vsp
+    release: prom-stack
+spec:
+  selector:
+    matchLabels:
+      team: vsp
+  namespaceSelector:
+    matchNames:
+      - ropt
+  endpoints:
+    - port: receiver-p
+      path: '/actuator/prometheus'
+      interval: 5s
+      honorLabels: true
+    - port: receiver-r-p
+      path: '/actuator/prometheus'
+      interval: 5s
+      honorLabels: true
+    - port: localizer-p
+      path: '/actuator/prometheus'
+      interval: 5s
+      honorLabels: true
+    - port: r-localizer-p
+      path: '/actuator/prometheus'
+      interval: 5s
+      honorLabels: true

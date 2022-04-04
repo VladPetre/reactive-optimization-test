@@ -6,6 +6,7 @@ metadata:
   namespace: ropt
   labels:
     app: r-caller-svc
+    team: vsp
 spec:
   selector:
     app: r-caller
@@ -22,6 +23,7 @@ metadata:
   namespace: ropt
   labels:
     app: receiver-svc
+    team: vsp
 spec:
   selector:
     app: receiver
@@ -38,6 +40,7 @@ metadata:
   namespace: ropt
   labels:
     app: r-receiver-svc
+    team: vsp
 spec:
   selector:
     app: r-receiver
@@ -54,6 +57,7 @@ metadata:
   namespace: ropt
   labels:
     app: localizer-svc
+    team: vsp
 spec:
   selector:
     app: localizer
@@ -70,6 +74,7 @@ metadata:
   namespace: ropt
   labels:
     app: r-localizer
+    team: vsp
 spec:
   selector:
     app: r-localizer
