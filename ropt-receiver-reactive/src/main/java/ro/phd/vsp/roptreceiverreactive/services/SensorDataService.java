@@ -43,7 +43,7 @@ public class SensorDataService {
         .headers(h -> buildRTHeaders(sensorDataDTO.getGuid().toString()))
         .retrieve()
         .bodyToMono(String.class)
-        .filter(s -> s != null && s.trim().isEmpty())
+        .filter(s -> s != null && !s.trim().isEmpty())
         .flatMap(s -> sensorDataRepository.save(toEntity(sensorDataDTO)).map(this::toDto));
   }
 
@@ -52,7 +52,7 @@ public class SensorDataService {
         .headers(h -> buildRTHeaders(sensorDataDTO.getGuid().toString()))
         .retrieve()
         .bodyToMono(String.class)
-        .filter(s -> s != null && s.trim().isEmpty())
+        .filter(s -> s != null && !s.trim().isEmpty())
         .flatMap(s -> sensorDataRepository.findById(sensorDataDTO.getGuid())
             .map(d -> {
               d.setBattery(sensorDataDTO.getBattery());

@@ -47,7 +47,6 @@ public class SensorDataHandler {
 
   public Mono<ServerResponse> save(ServerRequest request) {
     return request.bodyToMono(SensorDataDTO.class)
-        .map(SensorDataDTO::new)
         .flatMap(sensorDataService::save)
         .flatMap(data ->
             created(UriComponentsBuilder.fromPath("rt/sensor-data").build().toUri())
@@ -62,7 +61,6 @@ public class SensorDataHandler {
           d.setGuid(UUID.fromString(request.pathVariable("id")));
           return d;
         })
-        .map(SensorDataDTO::new)
         .flatMap(sensorDataService::updateWithGet)
         .flatMap(data ->
             created(UriComponentsBuilder.fromPath("rt/sensor-data").build().toUri())
