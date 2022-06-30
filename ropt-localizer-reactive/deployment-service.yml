@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: r-localizer-container
-          image: charlie.lan/ropt/ropt-localizer-reactive:latest
+          image: foxtrot.lan/ropt/ropt-localizer-reactive:latest
           imagePullPolicy: Always
           ports:
             - name: r-localizer-p

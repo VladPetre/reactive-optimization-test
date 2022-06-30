@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: receiver-container
-          image: charlie.lan/ropt/ropt-receiver:latest
+          image: foxtrot.lan/ropt/ropt-receiver:latest
           imagePullPolicy: Always
           ports:
             - name: receiver-p
