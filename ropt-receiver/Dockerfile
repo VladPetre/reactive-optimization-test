@@ -1,4 +1,4 @@
-FROM --platform=linux/arm64 charlie.lan:5000/openjdk:11-jre
+FROM --platform=linux/arm64 foxtrot.lan:5000/openjdk:11-jre
 
 COPY target/ropt-receiver.jar /ropt-receiver.jar
 
